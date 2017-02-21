@@ -4,12 +4,12 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 
 const portal = { node: null, timer: null };
 
-class PopoverContent extends Component {
+class Popover extends Component {
 
 
     render() {
 
-        const { children, handleMouseEnter, handleMouseLeave } = this.props;
+        const { children, handleMouseEnter, handleMouseLeave, offset } = this.props;
 
         return (
             <ReactCSSTransitionGroup
@@ -18,11 +18,12 @@ class PopoverContent extends Component {
                 transitionAppearTimeout={500}
                 transitionEnterTimeout={500}
                 transitionLeaveTimeout={500}>
-                
 
-            <div key={0} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+
+                <div key={0} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                    <div style={{ height: offset }}></div>
                     {typeof children.type === 'function' ? React.cloneElement(children) : children}
-            </div>
+                </div>
 
             </ReactCSSTransitionGroup>
 
@@ -30,18 +31,20 @@ class PopoverContent extends Component {
     }
 }
 
-class Popover extends Component {
+class Portal extends Component {
 
     static propTypes = {
         open: PropTypes.bool.isRequired,
         parent: PropTypes.string.isRequired,
         popoverClass: PropTypes.string,
-        timeout: PropTypes.number
+        timeout: PropTypes.number,
+        offset: PropTypes.number,
     }
 
     static defaultProps = {
         popoverClass: 'react-portal-popover__class',
-        timeout: 1500
+        timeout: 500,
+        offset: 0
     }
 
     constructor() {
@@ -100,7 +103,7 @@ class Popover extends Component {
         const nodeBounds = portal.node.getBoundingClientRect();
 
         // - Calculate position of node 
-        let top = bounds.top + bounds.height + 5;
+        let top = bounds.top + bounds.height;
         let left = bounds.left + bounds.width / 2 - nodeBounds.width / 2;
 
         portal.node.style.top = top + 'px';
@@ -125,13 +128,14 @@ class Popover extends Component {
 
         ReactDOM.unstable_renderSubtreeIntoContainer(
             this,
-            <PopoverContent
+            <Popover
                 parent={this.props.parent}
+                offset={this.props.offset}
                 handleMouseLeave={this.props.onMouseLeave}
                 handleMouseEnter={this.props.onMouseEnter}
-            > 
-            {children}
-            </PopoverContent>,
+            >
+                {children}
+            </Popover>,
             portal.node
         );
 
@@ -145,4 +149,4 @@ class Popover extends Component {
 }
 
 
-export default Popover;
+export default Portal;

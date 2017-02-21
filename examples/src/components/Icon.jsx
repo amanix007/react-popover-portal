@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 // - External components
-import Popover from '../../../src/Popover';
+import Popover from 'react-popover-portal';
 
-class Icon extends React.Component {
+class Icon extends Component {
 
     constructor() {
         super();
@@ -30,7 +30,7 @@ class Icon extends React.Component {
                 <div id={icon} className='box' onMouseEnter={this.displayPopup} onMouseLeave={this.hidePopup}>
                     {this.state.open ? 'popup is visible' : 'popup is hiding'} : {icon}
                 </div>
-                <Popover parent={'#' + icon} open={this.state.open} onMouseEnter={this.displayPopup} onMouseLeave={this.hidePopup}>
+                <Popover parent={'#' + icon} open={this.state.open} onMouseEnter={this.displayPopup} onMouseLeave={this.hidePopup} timeout={1000} offset={15}>
                     <div className="arrow_box">
                         <h1>{icon}</h1>
                     </div>

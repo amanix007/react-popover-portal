@@ -2,4 +2,4 @@ examples
 .babelrc
 *.tgz
 .vscode
-examples/.vscode 
+examples
