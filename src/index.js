@@ -1,32 +1,82 @@
 import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
+import ReactTransitionGroup from 'react-addons-transition-group';
 
-const portal = { node: null, timer: null };
+const portal = {
+    node: null,
+    timer: null
+};
+
+
+class PopoverContent extends Component{
+
+
+    componentWillAppear(callback) {
+        portal.node.style.opacity = 1;
+        console.log('will appear');
+        callback();
+    }
+
+    componentWillEnter(callback){
+        portal.node.style.opacity = 1;
+        console.log('will enter');
+        callback();
+    }
+
+    componentWillLeave(callback) {
+        console.log('will leave');
+        portal.node.style.opacity = 0;
+
+        setTimeout(() => {
+            callback();
+            this.props.onMouseLeave();
+            ReactDOM.unmountComponentAtNode(portal.node);
+        }, 500);
+    }
+
+    render(){
+
+        const { children, offset, onMouseEnter, onMouseLeave} = this.props;
+
+        return (
+
+            <div style={{}} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+                <div style={{ height: offset }}></div>
+                {typeof children.type === 'function' ? React.cloneElement(children) : children}
+            </div> 
+
+        );
+
+    }
+}
 
 class Popover extends Component {
 
+    constructor(){
+        super();
+        this.state = {visible: true}
+    }
+
+    componentWillReceiveProps(props){
+        this.setState({visible: true});
+
+        if (!props.open) {
+            portal.timer = setTimeout(() => {
+                this.setState({visible: false});
+            }, props.timeout);
+        } else {
+            clearInterval(portal.timer);
+        }
+                    
+    }
 
     render() {
-
-        const { children, handleMouseEnter, handleMouseLeave, offset } = this.props;
-
-        return (
-            <ReactCSSTransitionGroup
-                transitionName="example"
-                transitionAppear={true}
-                transitionAppearTimeout={500}
-                transitionEnterTimeout={500}
-                transitionLeaveTimeout={500}>
-
-
-                <div key={0} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                    <div style={{ height: offset }}></div>
-                    {typeof children.type === 'function' ? React.cloneElement(children) : children}
-                </div>
-
-            </ReactCSSTransitionGroup>
-
+        const { children, ...other } = this.props;
+        return ( 
+        <ReactTransitionGroup>
+            {this.state.visible ?
+             <PopoverContent {...other}>{children}</PopoverContent> : null}
+        </ReactTransitionGroup>
         );
     }
 }
@@ -47,27 +97,12 @@ class Portal extends Component {
         offset: 0
     }
 
-    constructor() {
-        super();
-
-        // - Wheterver the popover is hovered 
-        this.hover = false;
-
-        // - Bind
-        this.removePortal = this.removePortal.bind(this);
-
-    }
-
     componentWillReceiveProps(props) {
         const { open } = props;
 
         if (open == this.props.open) return;
 
-        if (open) {
-            this.renderPortal();
-        } else {
-            this.removePortal();
-        }
+        this.renderPortal(props);
 
     }
 
@@ -78,10 +113,6 @@ class Portal extends Component {
         }
     }
 
-    componentWillUnmount() {
-        this.removePortal();
-    }
-
 
     renderNode() {
         portal.node = document.createElement('div');
@@ -90,7 +121,7 @@ class Portal extends Component {
         // - Styles
         portal.node.style.transition = 'all 0.5s ease';
         portal.node.style.position = 'absolute';
-
+        portal.node.style.opacity = 0;
 
         document.body.appendChild(portal.node);
     }
@@ -111,37 +142,26 @@ class Portal extends Component {
 
     }
 
-    removePortal() {
-        // - Clear other existing timers 
-        clearTimeout(portal.timer);
-        // - Schedule unmount 
-        portal.timer = setTimeout(() => ReactDOM.unmountComponentAtNode(portal.node), this.props.timeout)
-    }
-
-    renderPortal() {
+    renderPortal(props) {
 
         // - Delete any timer
         clearTimeout(portal.timer);
 
         // - Render portal 
-        const children = this.props.children;
+        const {children, ...other} = props;
 
         ReactDOM.unstable_renderSubtreeIntoContainer(
             this,
-            <Popover
-                parent={this.props.parent}
-                offset={this.props.offset}
-                handleMouseLeave={this.props.onMouseLeave}
-                handleMouseEnter={this.props.onMouseEnter}
-            >
-                {children}
-            </Popover>,
+            <Popover {...other}>{children}</Popover>,
             portal.node
         );
 
-        this.updateNode(true);
+        this.updateNode();
     }
 
+    shouldComponentUpdate(){
+        return false;
+    }
 
     render() {
         return null;

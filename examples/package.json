@@ -34,7 +34,8 @@
   "dependencies": {
     "react": "15.4.2",
     "react-addons-css-transition-group": "^15.4.2",
+    "react-addons-transition-group": "^15.4.2",
     "react-dom": "15.4.2",
-    "react-popover-portal": "file:///C:\\Users\\Onur\\MEGA\\workspace\\www\\react-popover-portal\\react-popover-portal-0.0.2.tgz"
+    "react-popover-portal": "^0.0.3"
   }
 }
