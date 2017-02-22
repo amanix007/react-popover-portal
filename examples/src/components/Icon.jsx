@@ -27,12 +27,10 @@ class Icon extends Component {
 
         return (
             <div>
-                <div id={icon} className='box' 
-                onMouseEnter={this.displayPopup} onMouseLeave={this.hidePopup}>
+                <div id={icon} className='box' onMouseEnter={this.displayPopup} onMouseLeave={this.hidePopup}>
                     {this.state.open ? 'popup is visible' : 'popup is hiding'} : {icon}
                 </div>
-                <Popover parent={'#' + icon} open={this.state.open} timeout={1000} animationTime={300} 
-                onMouseEnter={this.displayPopup} onMouseLeave={this.hidePopup}>
+                <Popover parent={'#' + icon} open={this.state.open} onMouseEnter={this.displayPopup} onMouseLeave={this.hidePopup}>
                     <div className="popup">
                         <h1>{icon}</h1>
                     </div>

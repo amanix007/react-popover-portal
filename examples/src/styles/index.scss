@@ -79,13 +79,17 @@ h1 {
 }
 
 .rpp{
+  overflow: hidden;
 }
+
 .rpp__hidden{
   opacity: 0;
+  height: 0px;
 }
 
 .rpp__active{
   opacity: 1;
+  height: 320px;
 }
 
 

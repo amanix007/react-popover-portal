@@ -1,6 +1,6 @@
 {
   "name": "react-popover-portal",
-  "version": "0.0.4",
+  "version": "0.0.6",
   "description": "A popover that renders to <body>",
   "main": "lib/index.js",
   "directories": {
@@ -22,8 +22,7 @@
   "license": "MIT",
   "peerDependencies": {
     "react": "^15.4.2",
-    "react-dom": "^15.4.2",
-    "react-addons-transition-group": "^15.4.2"
+    "react-dom": "^15.4.2"
   },
   "repository": {
     "type": "git",
@@ -38,7 +37,6 @@
   },
   "dependencies": {
     "react": "^15.4.2",
-    "react-addons-transition-group": "^15.4.2",
     "react-dom": "^15.4.2"
   }
 }

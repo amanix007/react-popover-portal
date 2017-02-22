@@ -6,7 +6,6 @@ const portal = {
     node: null,
     timer: null,
     active: false
-    
 };
 
 
@@ -37,13 +36,15 @@ class Portal extends Component {
         timeout: PropTypes.number,
         offset: PropTypes.number,
         animationTime: PropTypes.number,
+        translateSpeed: PropTypes.number
     }
 
     static defaultProps = {
         prefix: 'rpp',
-        timeout: 3000,
+        timeout: 1000,
         offset: 10,
-        animationTime: 300,
+        animationTime: 350,
+        translateSpeed: 300,
     }
 
     openPortal(){
@@ -69,7 +70,7 @@ class Portal extends Component {
 
             portal.active = false;
 
-        }, this.props.timeout - this.props.animationTime);
+        }, this.props.timeout);
     }
 
     componentWillReceiveProps(props) {
@@ -99,9 +100,9 @@ class Portal extends Component {
         portal.node = document.createElement('div');
 
         // - Styles
-        portal.node.style.transition = `all 300ms ease`;
+        portal.node.style.transition = `all ${this.props.animationTime}ms ease, transform ${this.props.translateSpeed}ms ease`;
         portal.node.style.position = 'absolute';
-        portal.node.className = this.props.prefix;
+        portal.node.className = this.props.prefix + ' ' + this.props.prefix + '__hidden';
         
         portal.node.style.top = '0px';
         portal.node.style.left = '0px';
@@ -128,7 +129,6 @@ class Portal extends Component {
 
         // - Render portal 
         const {children, ...other} = props;
-
 
         ReactDOM.unstable_renderSubtreeIntoContainer(
             this,
