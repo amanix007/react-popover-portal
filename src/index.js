@@ -6,116 +6,24 @@ const portal = {
     node: null,
     timer: null,
     active: false
+    
 };
 
 
-/**
- * The popovercontent animates the popover and also renders it's children 
- * It is relied on ReactTransitionGroup for the animations.
- * The portal will be deleted after the animation is ended 
- */
-class PopoverContent extends Component{
-
-    addAnimation(){
-        clearTimeout(portal.timer);
-        portal.active = true;
-
-        portal.node.classList.add(this.props.prefix + '__active');
-        portal.node.classList.remove(this.props.prefix + '__hidden');
-    }
-
-    removeAnimation(){
-        portal.node.classList.add(this.props.prefix + '__hidden');
-        portal.node.classList.remove(this.props.prefix + '__active');
-    }
-
-    componentWillAppear(callback) {
-        this.addAnimation();
-        callback();
-    }
-
-    componentWillEnter(callback){
-        this.addAnimation();
-        callback();
-    }
-
-    componentWillLeave(callback) {
-        clearTimeout(portal.timer);
-        portal.timer = setTimeout(() => {
-
-            this.removeAnimation();
-            console.log('removing animation', portal.active);
-
-            clearTimeout(portal.timer);
-            if(portal.active) return callback();
-            
-            portal.timer = setTimeout(() =>{
-                callback();
-                portal.active = false;
-            }, this.props.animationTime)
-
-        }, this.props.timeout - this.props.animationTime);
-    }
-
-    render(){
-
-        const { children, offset} = this.props;
-
-        return (
-            <div>
-                <div style={{ height: offset }}></div>
-                {typeof children.type === 'function' ? React.cloneElement(children) : children}
-            </div> 
-        );
-
-    }
-}
 
 /**
  * The popover controls when the portal is removed 
  */
 class Popover extends Component {
-
-    constructor(){
-        super();
-        this.state = {hovered: false, visible: false }
-    }
-
-    componentWillMount(){
-        this.setState({visible: this.props.open})
-    }
-
-    componentWillReceiveProps(props){
-         this.setState({visible: props.open || this.state.hovered});
-    }
-
-    handleMouseEnter(){
-        this.setState({hovered: true, visible: true});
-    }
-
-    handleMouseLeave(){
-        this.setState({hovered: false, visible: false});
-    }
-
-    shouldComponentUpdate(){
-        return true;
-    }
-
     render() {
 
-        const { children, ...other } = this.props;
-        const visible = this.state.visible;
- 
+        const { children, offset, ...other } = this.props;
+
         return ( 
-        <ReactTransitionGroup>
-            {visible ? 
-                    <PopoverContent {...other}>
-                        <div onMouseEnter={this.handleMouseEnter.bind(this)} onMouseLeave={this.handleMouseLeave.bind(this)}>
-                            {children}
-                        </div>
-                    </PopoverContent>
-            : null}
-        </ReactTransitionGroup>
+            <div onMouseEnter={this.props.onMouseEnter} onMouseLeave={this.props.onMouseLeave}>
+                <div style={{ height: offset }}></div>
+                {typeof children.type === 'function' ? React.cloneElement(children) : children}
+            </div>
         );
     }
 }
@@ -138,14 +46,48 @@ class Portal extends Component {
         animationTime: 300,
     }
 
-    componentWillReceiveProps(props) {
-        const { open } = props;
+    openPortal(){
+        clearTimeout(portal.timer);
 
-        this.renderPortal(props);
+        // - Add classes when portal is open
+        portal.node.classList.add(this.props.prefix + '__active');
+        portal.node.classList.remove(this.props.prefix + '__hidden');
+
+        portal.active = true;
+    }
+
+    closePortal(){
+
+        clearTimeout(portal.timer);
+        portal.timer = setTimeout(() => {
+          
+            // - Add classes when portal is open
+            portal.node.classList.remove(this.props.prefix + '__active');
+            portal.node.classList.add(this.props.prefix + '__hidden');
+
+            portal.timer = setTimeout(() => ReactDOM.unmountComponentAtNode(portal.node), this.props.animationTime)
+
+            portal.active = false;
+
+        }, this.props.timeout - this.props.animationTime);
+    }
+
+    componentWillReceiveProps(props) {
+        const { open, parent } = props;
+
+        if(props.open) {
+            this.openPortal();
+            this.renderPortal(props);
+        }
+        else {
+            this.closePortal();
+        }
+        
     }
 
 
     componentDidMount() {
+
         if (!portal.node) {
             this.renderNode();
         }
@@ -157,8 +99,12 @@ class Portal extends Component {
         portal.node = document.createElement('div');
 
         // - Styles
-        portal.node.style.transition = `all 400ms ease`;
+        portal.node.style.transition = `all 300ms ease`;
         portal.node.style.position = 'absolute';
+        portal.node.className = this.props.prefix;
+        
+        portal.node.style.top = '0px';
+        portal.node.style.left = '0px';
 
         document.body.appendChild(portal.node);
     }
@@ -168,14 +114,13 @@ class Portal extends Component {
         const parent = document.querySelector(this.props.parent);
 
         const bounds = parent.getBoundingClientRect();
-        const nodeBounds = portal.node.getBoundingClientRect();
+        const node = portal.node.getBoundingClientRect();
 
-        // - Calculate position of node 
-        let top = bounds.top + bounds.height;
-        let left = bounds.left;
 
-        portal.node.style.top = top + 'px';
-        portal.node.style.left = left + 'px';
+        const top =  bounds.top + bounds.height;
+        const left = bounds.left + bounds.width / 2 - node.width / 2;
+
+        portal.node.style.transform = `translate(${left}px, ${top}px)`;
 
     }
 
@@ -184,6 +129,7 @@ class Portal extends Component {
         // - Render portal 
         const {children, ...other} = props;
 
+
         ReactDOM.unstable_renderSubtreeIntoContainer(
             this,
             <Popover {...other}>{children}</Popover>,
@@ -191,6 +137,8 @@ class Portal extends Component {
         );
 
         this.updateNode();
+        
+
     }
 
     render() {

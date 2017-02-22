@@ -56,14 +56,14 @@ h1 {
   height: 30px;
 }
 
-.arrow_box {
+.popup {
 	position: relative;
+  width: 140px;
 	background: rgba(0, 0, 0, 0.7);
   padding: 10px;
-  width: 120px;
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }
-.arrow_box:after {
+.popup:after {
 	bottom: 100%;
 	left: 50%;
 	border: solid transparent;
@@ -78,33 +78,14 @@ h1 {
 	margin-left: -10px;
 }
 
-.react-portal-popover__class{
-  cursor:pointer;
+.rpp{
+}
+.rpp__hidden{
+  opacity: 0;
 }
 
-
-.fade-enter {
-  opacity: 0.01;
-  transition: opacity 0.5s ease;
-}
-
-.fade-enter.fade-enter-active {
+.rpp__active{
   opacity: 1;
 }
 
-.fade-leave {
-  opacity: 1;
-  transition: opacity 0.5s ease;}
 
-.fade-leave.fade-leave-active {
-  opacity: 0.01;
-  transition: opacity 0.5s ease;
-}
-
-.fade-appear {
-  opacity: 0.01;
-  transition: opacity 0.5s ease;}
-
-.fade-appear.fade-appear-active {
-  opacity: 1;
-}
