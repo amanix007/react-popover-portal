@@ -4,78 +4,117 @@ import ReactTransitionGroup from 'react-addons-transition-group';
 
 const portal = {
     node: null,
-    timer: null
+    timer: null,
+    active: false
 };
 
 
+/**
+ * The popovercontent animates the popover and also renders it's children 
+ * It is relied on ReactTransitionGroup for the animations.
+ * The portal will be deleted after the animation is ended 
+ */
 class PopoverContent extends Component{
 
+    addAnimation(){
+        clearTimeout(portal.timer);
+        portal.active = true;
+
+        portal.node.classList.add(this.props.prefix + '__active');
+        portal.node.classList.remove(this.props.prefix + '__hidden');
+    }
+
+    removeAnimation(){
+        portal.node.classList.add(this.props.prefix + '__hidden');
+        portal.node.classList.remove(this.props.prefix + '__active');
+    }
 
     componentWillAppear(callback) {
-        portal.node.style.opacity = 1;
-        console.log('will appear');
+        this.addAnimation();
         callback();
     }
 
     componentWillEnter(callback){
-        portal.node.style.opacity = 1;
-        console.log('will enter');
+        this.addAnimation();
         callback();
     }
 
     componentWillLeave(callback) {
-        console.log('will leave');
-        portal.node.style.opacity = 0;
+        clearTimeout(portal.timer);
+        portal.timer = setTimeout(() => {
 
-        setTimeout(() => {
-            callback();
-            this.props.onMouseLeave();
-            ReactDOM.unmountComponentAtNode(portal.node);
-        }, 500);
+            this.removeAnimation();
+            console.log('removing animation', portal.active);
+
+            clearTimeout(portal.timer);
+            if(portal.active) return callback();
+            
+            portal.timer = setTimeout(() =>{
+                callback();
+                portal.active = false;
+            }, this.props.animationTime)
+
+        }, this.props.timeout - this.props.animationTime);
     }
 
     render(){
 
-        const { children, offset, onMouseEnter, onMouseLeave} = this.props;
+        const { children, offset} = this.props;
 
         return (
-
-            <div style={{}} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+            <div>
                 <div style={{ height: offset }}></div>
                 {typeof children.type === 'function' ? React.cloneElement(children) : children}
             </div> 
-
         );
 
     }
 }
 
+/**
+ * The popover controls when the portal is removed 
+ */
 class Popover extends Component {
 
     constructor(){
         super();
-        this.state = {visible: true}
+        this.state = {hovered: false, visible: false }
+    }
+
+    componentWillMount(){
+        this.setState({visible: this.props.open})
     }
 
     componentWillReceiveProps(props){
-        this.setState({visible: true});
+         this.setState({visible: props.open || this.state.hovered});
+    }
 
-        if (!props.open) {
-            portal.timer = setTimeout(() => {
-                this.setState({visible: false});
-            }, props.timeout);
-        } else {
-            clearInterval(portal.timer);
-        }
-                    
+    handleMouseEnter(){
+        this.setState({hovered: true, visible: true});
+    }
+
+    handleMouseLeave(){
+        this.setState({hovered: false, visible: false});
+    }
+
+    shouldComponentUpdate(){
+        return true;
     }
 
     render() {
+
         const { children, ...other } = this.props;
+        const visible = this.state.visible;
+ 
         return ( 
         <ReactTransitionGroup>
-            {this.state.visible ?
-             <PopoverContent {...other}>{children}</PopoverContent> : null}
+            {visible ? 
+                    <PopoverContent {...other}>
+                        <div onMouseEnter={this.handleMouseEnter.bind(this)} onMouseLeave={this.handleMouseLeave.bind(this)}>
+                            {children}
+                        </div>
+                    </PopoverContent>
+            : null}
         </ReactTransitionGroup>
         );
     }
@@ -86,28 +125,27 @@ class Portal extends Component {
     static propTypes = {
         open: PropTypes.bool.isRequired,
         parent: PropTypes.string.isRequired,
-        popoverClass: PropTypes.string,
+        prefix: PropTypes.string,
         timeout: PropTypes.number,
         offset: PropTypes.number,
+        animationTime: PropTypes.number,
     }
 
     static defaultProps = {
-        popoverClass: 'react-portal-popover__class',
-        timeout: 500,
-        offset: 0
+        prefix: 'rpp',
+        timeout: 3000,
+        offset: 10,
+        animationTime: 300,
     }
 
     componentWillReceiveProps(props) {
         const { open } = props;
 
-        if (open == this.props.open) return;
-
         this.renderPortal(props);
-
     }
 
-    componentDidMount() {
 
+    componentDidMount() {
         if (!portal.node) {
             this.renderNode();
         }
@@ -115,13 +153,12 @@ class Portal extends Component {
 
 
     renderNode() {
+        
         portal.node = document.createElement('div');
-        portal.node.className = this.props.popoverClass;
 
         // - Styles
-        portal.node.style.transition = 'all 0.5s ease';
+        portal.node.style.transition = `all 400ms ease`;
         portal.node.style.position = 'absolute';
-        portal.node.style.opacity = 0;
 
         document.body.appendChild(portal.node);
     }
@@ -135,7 +172,7 @@ class Portal extends Component {
 
         // - Calculate position of node 
         let top = bounds.top + bounds.height;
-        let left = bounds.left + bounds.width / 2 - nodeBounds.width / 2;
+        let left = bounds.left;
 
         portal.node.style.top = top + 'px';
         portal.node.style.left = left + 'px';
@@ -143,9 +180,6 @@ class Portal extends Component {
     }
 
     renderPortal(props) {
-
-        // - Delete any timer
-        clearTimeout(portal.timer);
 
         // - Render portal 
         const {children, ...other} = props;
@@ -157,10 +191,6 @@ class Portal extends Component {
         );
 
         this.updateNode();
-    }
-
-    shouldComponentUpdate(){
-        return false;
     }
 
     render() {
