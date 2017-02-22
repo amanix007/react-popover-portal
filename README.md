@@ -1,7 +1,7 @@
 # react-popover-portal
 A simple popover that renders to the body. Accelerated translation between transforms.  <br/>
 
-![GIF](https://raw.githubusercontent.com/onurhb/react-popover-portal/master/react-popover-portal.gif)
+![GIF](https://raw.githubusercontent.com/onurhb/react-popover-portal/master/showcase.gif)
 
 # Example
 > Make sure that you have install packages in root folder and examples folder. <br/>
@@ -29,7 +29,7 @@ See `/examples/src/styles/index.scss` for an example ('.popup class').
 
 ### Animate 
 You can animate the popup when it appears or disappears. Simply add these classes to your css (with rpp as prefix): <br/>
-`
+```
 .rpp{
   overflow: hidden;
 }
@@ -44,7 +44,8 @@ You can animate the popup when it appears or disappears. Simply add these classe
   height: 320px;
 }
 
-`
+```
+
 
 > `__active` will be added when the popover is visible and `__hidden` will be added when the popover is closing. 
 
