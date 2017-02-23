@@ -17,30 +17,35 @@ class Icon extends Component {
 
     hidePopup() {
         this.setState({ open: false });
-        console.log('You are not hovering the parent ', this.props.icon);
+        // console.log('You are not hovering the parent ', this.props.icon);
     }
 
     displayPopup() {
         this.setState({ open: true });
-        console.log('You are hovering the parent ', this.props.icon);
+        // console.log('You are hovering the parent ', this.props.icon);
     }
 
     onPopupHover(){
         this.setState({ open: true });
-        console.log('You are hovering the popup content');
+        // console.log('You are hovering the popup content');
 
     }
 
     onPopupLeave(){
         this.setState({ open: false });
-        console.log('You are not hovering the popup content anymore');
+        // console.log('You are not hovering the popup content anymore');
     }
 
     render() {
 
         const {icon} = this.props;
 
-
+        const transitions = [
+            {
+                name: 'background',
+                type: 'linear'
+            }
+        ]
 
         return (
             <div>
@@ -49,7 +54,13 @@ class Icon extends Component {
                     {this.state.open ? 'popup is visible' : 'popup is hiding'} : {icon}
                 </div>
 
-                <Popover prefix='popup' parent={'#' + icon} open={this.state.open} onMouseEnter={this.onPopupHover} onMouseLeave={this.onPopupLeave}>
+                <Popover 
+                translateSpeed={this.props.translateSpeed}
+                animationTime={this.props.animationTime} 
+                timeout={this.props.timeout}
+                prefix='popup' parent={'#' + this.props.parent} 
+                open={this.state.open} 
+                onMouseEnter={this.onPopupHover} onMouseLeave={this.onPopupLeave}>
                     <div className='popup-content'>
                        <h1>{icon}</h1>
                     </div>

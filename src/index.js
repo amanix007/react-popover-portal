@@ -41,14 +41,16 @@ class Portal extends Component {
         timeout: 1000,
         offset: 10,
         animationTime: 420,
-        translateSpeed: 310,
+        translateSpeed: 210,
         transitions: [{
             name: 'all',
             type: 'ease' 
         }]
     }
 
-    openPortal(){
+    displayPortal(){
+
+        const {translateSpeed, prefix, animationTime, transitions} = this.props;
 
         // - Prevent other components from removing the portal 
         clearTimeout(portal.timer);
@@ -57,9 +59,18 @@ class Portal extends Component {
         portal.node.classList.add(this.props.prefix + '__active');
         portal.node.classList.remove(this.props.prefix + '__hidden');
 
+        // - Styles
+        let allTransitions = '';
+        transitions.map((transition) => allTransitions += `${transition.name} ${animationTime}ms ${transition.type},`)
+        allTransitions += `transform ${translateSpeed}ms ease`;
+        portal.node.style.transition = allTransitions;
+
     }
 
-    closePortal(){
+    scheduleHide(){
+
+        // - Prevent other components from removing the portal 
+        clearTimeout(portal.timer);
 
         portal.timer = setTimeout(() => {
 
@@ -70,17 +81,19 @@ class Portal extends Component {
             portal.timer = setTimeout(() => ReactDOM.unmountComponentAtNode(portal.node), this.props.animationTime)
 
         }, this.props.timeout);
+
     }
 
     componentWillReceiveProps(props) {
+
         const { open, parent } = props;
 
         if(props.open) {
-            this.openPortal();
-            this.renderPortal(props);
+            this.displayPortal();
+            this.renderPopup(props);
         }
         else {
-            this.closePortal();
+            this.scheduleHide();
         }
         
     }
@@ -91,49 +104,44 @@ class Portal extends Component {
         if (!portal.node) {
             this.renderNode();
         }
+
     }
 
 
     renderNode() {
 
-        const {translateSpeed, prefix, animationTime, transitions} = this.props;
+        const {translateSpeed, prefix, animationTime, transitions, offset} = this.props;
         
         portal.node = document.createElement('div');
 
-        // - Styles
-        let allTransitions = `transform ${translateSpeed}ms ease`;
-
-        // - Extra transitions 
-        transitions.map((transition) => allTransitions += `, ${transition.name} ${animationTime}ms ${transition.type}`)
-
-        console.log(allTransitions);
-
-        portal.node.style.transition = allTransitions;
         portal.node.className = prefix + ' ' + prefix + '__hidden';
         portal.node.style.position = 'absolute';
         
-        portal.node.style.top = '0px';
+        portal.node.style.top = `${offset}px`;
         portal.node.style.left = '0px';
-
+        
         document.body.appendChild(portal.node);
     }
 
-    updateNode() {
+    updatePosition() {
 
-        const parent = document.querySelector(this.props.parent);
+        const { parent } = this.props;
 
-        const bounds = parent.getBoundingClientRect();
-        const node = portal.node.getBoundingClientRect();
+
+        const parentEl = document.querySelector(parent);
+
+        const bounds = parentEl.getBoundingClientRect();
+        const nodeBounds = portal.node.getBoundingClientRect();
 
 
         const top =  bounds.top + bounds.height;
-        const left = bounds.left + bounds.width / 2 - node.width / 2;
+        const left = bounds.left + bounds.width / 2 - nodeBounds.width / 2;
 
-        portal.node.style.transform = `translate(${left}px, ${top + this.props.offset}px)`;
+        portal.node.style.transform = `translate(${left}px, ${top}px)`;
 
     }
 
-    renderPortal(props) {
+    renderPopup(props) {
 
         // - Render portal 
         const {children, ...other} = props;
@@ -144,7 +152,7 @@ class Portal extends Component {
             portal.node
         );
 
-        this.updateNode();
+        this.updatePosition();
     
     }
 
