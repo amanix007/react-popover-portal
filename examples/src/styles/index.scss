@@ -57,12 +57,10 @@ h1 {
 }
 
 .popup {
-	position: relative;
-  width: 140px;
 	background: rgba(0, 0, 0, 0.7);
-  padding: 10px;
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }
+
 .popup:after {
 	bottom: 100%;
 	left: 50%;
@@ -78,18 +76,22 @@ h1 {
 	margin-left: -10px;
 }
 
-.rpp{
-  overflow: hidden;
-}
 
-.rpp__hidden{
+.popup__hidden{
   opacity: 0;
-  height: 0px;
+  background: red;
 }
 
-.rpp__active{
+.popup__active{
   opacity: 1;
-  height: 320px;
+	background: rgba(0, 0, 0, 0.7);
 }
 
+
+.popup-content{
+  padding: 10px;
+  font-size: 32px;
+  border: 1px solid orangered;
+  width: 320px;
+}
 

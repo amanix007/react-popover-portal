@@ -3,29 +3,26 @@ import ReactDOM from 'react-dom';
 
 const portal = {
     node: null,
-    timer: null,
-    active: false
+    timer: null
 };
 
+/**
+ * The popover content gets rendered to this component
+ */
+const Popover = (props) => {
 
+    const { children, onMouseEnter, onMouseLeave } = props;
+
+    return ( 
+        <div onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+            {typeof children.type === 'function' ? React.cloneElement(children) : children}
+        </div>
+    );
+} 
 
 /**
- * The popover controls when the portal is removed 
+ * Controls the portal close and render
  */
-class Popover extends Component {
-    render() {
-
-        const { children, offset, ...other } = this.props;
-
-        return ( 
-            <div onMouseEnter={this.props.onMouseEnter} onMouseLeave={this.props.onMouseLeave}>
-                <div style={{ height: offset }}></div>
-                {typeof children.type === 'function' ? React.cloneElement(children) : children}
-            </div>
-        );
-    }
-}
-
 class Portal extends Component {
 
     static propTypes = {
@@ -35,39 +32,42 @@ class Portal extends Component {
         timeout: PropTypes.number,
         offset: PropTypes.number,
         animationTime: PropTypes.number,
-        translateSpeed: PropTypes.number
+        translateSpeed: PropTypes.number,
+        transitions: PropTypes.arrayOf(PropTypes.object)
     }
 
     static defaultProps = {
         prefix: 'rpp',
         timeout: 1000,
         offset: 10,
-        animationTime: 350,
-        translateSpeed: 300,
+        animationTime: 420,
+        translateSpeed: 310,
+        transitions: [{
+            name: 'all',
+            type: 'ease' 
+        }]
     }
 
     openPortal(){
+
+        // - Prevent other components from removing the portal 
         clearTimeout(portal.timer);
 
         // - Add classes when portal is open
         portal.node.classList.add(this.props.prefix + '__active');
         portal.node.classList.remove(this.props.prefix + '__hidden');
 
-        portal.active = true;
     }
 
     closePortal(){
 
-        clearTimeout(portal.timer);
         portal.timer = setTimeout(() => {
-          
-            // - Add classes when portal is open
+
+            // - Add classes when portal is closed
             portal.node.classList.remove(this.props.prefix + '__active');
             portal.node.classList.add(this.props.prefix + '__hidden');
 
             portal.timer = setTimeout(() => ReactDOM.unmountComponentAtNode(portal.node), this.props.animationTime)
-
-            portal.active = false;
 
         }, this.props.timeout);
     }
@@ -95,13 +95,22 @@ class Portal extends Component {
 
 
     renderNode() {
+
+        const {translateSpeed, prefix, animationTime, transitions} = this.props;
         
         portal.node = document.createElement('div');
 
         // - Styles
-        portal.node.style.transition = `all ${this.props.animationTime}ms ease, transform ${this.props.translateSpeed}ms ease`;
+        let allTransitions = `transform ${translateSpeed}ms ease`;
+
+        // - Extra transitions 
+        transitions.map((transition) => allTransitions += `, ${transition.name} ${animationTime}ms ${transition.type}`)
+
+        console.log(allTransitions);
+
+        portal.node.style.transition = allTransitions;
+        portal.node.className = prefix + ' ' + prefix + '__hidden';
         portal.node.style.position = 'absolute';
-        portal.node.className = this.props.prefix + ' ' + this.props.prefix + '__hidden';
         
         portal.node.style.top = '0px';
         portal.node.style.left = '0px';
@@ -120,7 +129,7 @@ class Portal extends Component {
         const top =  bounds.top + bounds.height;
         const left = bounds.left + bounds.width / 2 - node.width / 2;
 
-        portal.node.style.transform = `translate(${left}px, ${top}px)`;
+        portal.node.style.transform = `translate(${left}px, ${top + this.props.offset}px)`;
 
     }
 
@@ -136,8 +145,7 @@ class Portal extends Component {
         );
 
         this.updateNode();
-        
-
+    
     }
 
     render() {

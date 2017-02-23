@@ -1,12 +1,12 @@
 # react-popover-portal
-A simple popover that renders to the body. Accelerated translation between transforms.  <br/>
+A simple popover that renders to the body. Accelerated translation between nodes.  <br/>
 
 ![GIF](https://raw.githubusercontent.com/onurhb/react-popover-portal/master/showcase.gif)
 
 # Example
-> Make sure that you have install packages in root folder and examples folder. <br/>
-> To start webpack dev server, run `npm start` inside `/examples` folder <br/>
-> Navigate to `localhost:8080` in your browser to see the result 
+1. Make sure that you have installed packages in root folder and examples folder. <br/>
+2. To start webpack dev server, run `npm start` inside `/examples` folder. <br/>
+3. Navigate to `localhost:8080` in your browser to see the result.
 
 # Props 
 |      Prop      	|                                      Description                                      	|      Type      	|   Required   	| Default Value 	|
@@ -25,23 +25,18 @@ A simple popover that renders to the body. Accelerated translation between trans
 
 # Customize
 You are free to customize the popup. react-popover-portal does not care on how your popup looks. Just pass a div as child.  <br/>
-See `/examples/src/styles/index.scss` for an example ('.popup class').
+> See `/examples/src/styles/index.scss` for an example (.popup class).
 
 ### Animate 
 You can animate the popup when it appears or disappears. Simply add these classes to your css (with rpp as prefix): <br/>
-```
-.rpp{
-  overflow: hidden;
-}
 
+```
 .rpp__hidden{
   opacity: 0;
-  height: 0px;
 }
 
 .rpp__active{
   opacity: 1;
-  height: 320px;
 }
 
 ```

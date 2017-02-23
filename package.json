@@ -1,6 +1,6 @@
 {
   "name": "react-popover-portal",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "A popover that renders to <body>",
   "main": "lib/index.js",
   "directories": {

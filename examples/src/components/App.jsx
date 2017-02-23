@@ -24,7 +24,7 @@ class App extends React.Component {
 
       <div className='app'>
 
-        <h1 >react-popover-portal</h1>
+        <h1>react-popover-portal</h1>
 
         <div className="container">
           {this.state.icons.map(icon => <Icon key={icon} icon={icon} />)}
