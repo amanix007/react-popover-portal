@@ -13,12 +13,12 @@ const Popover = (props) => {
 
     const { children, onMouseEnter, onMouseLeave } = props;
 
-    return ( 
+    return (
         <div onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
             {typeof children.type === 'function' ? React.cloneElement(children) : children}
         </div>
     );
-} 
+}
 
 /**
  * Controls the portal close and render
@@ -28,12 +28,20 @@ class Portal extends Component {
     static propTypes = {
         open: PropTypes.bool.isRequired,
         parent: PropTypes.string.isRequired,
+
+        // - Settings 
         prefix: PropTypes.string,
         timeout: PropTypes.number,
         offset: PropTypes.number,
+
+        // - Animations 
         animationTime: PropTypes.number,
         translateSpeed: PropTypes.number,
-        transitions: PropTypes.arrayOf(PropTypes.object)
+        transitions: PropTypes.arrayOf(PropTypes.object),
+
+        // - Events 
+        onMouseEnter: PropTypes.func,
+        onMouseLeave: PropTypes.func
     }
 
     static defaultProps = {
@@ -44,11 +52,11 @@ class Portal extends Component {
         translateSpeed: 210,
         transitions: [{
             name: 'all',
-            type: 'ease' 
+            type: 'ease'
         }]
     }
 
-    displayPortal(){
+    displayPortal() {
 
         const {translateSpeed, prefix, animationTime, transitions} = this.props;
 
@@ -60,44 +68,48 @@ class Portal extends Component {
         portal.node.classList.remove(this.props.prefix + '__hidden');
 
         // - Styles
-        let allTransitions = '';
-        transitions.map((transition) => allTransitions += `${transition.name} ${animationTime}ms ${transition.type},`)
-        allTransitions += `transform ${translateSpeed}ms ease`;
-        portal.node.style.transition = allTransitions;
+        let mTransitions = '';
+        transitions.map((transition) => mTransitions += `${transition.name} ${animationTime}ms ${transition.type},`)
+
+        mTransitions += `transform ${translateSpeed <= 0 ? 1 : translateSpeed}ms ease`;
+
+        portal.node.style.transition = mTransitions;
+
 
     }
 
-    scheduleHide(){
+    scheduleHide() {
 
+
+        const { prefix, timeout, animationTime } = this.props;
         // - Prevent other components from removing the portal 
         clearTimeout(portal.timer);
 
         portal.timer = setTimeout(() => {
 
             // - Add classes when portal is closed
-            portal.node.classList.remove(this.props.prefix + '__active');
-            portal.node.classList.add(this.props.prefix + '__hidden');
+            portal.node.classList.remove(prefix + '__active');
+            portal.node.classList.add(prefix + '__hidden');
 
-            portal.timer = setTimeout(() => ReactDOM.unmountComponentAtNode(portal.node), this.props.animationTime)
+            portal.timer = setTimeout(() => ReactDOM.unmountComponentAtNode(portal.node), animationTime)
 
-        }, this.props.timeout);
+        }, timeout);
 
     }
 
     componentWillReceiveProps(props) {
 
-        const { open, parent } = props;
+        const { open } = props;
 
-        if(props.open) {
+        if (open) {
             this.displayPortal();
             this.renderPopup(props);
         }
         else {
             this.scheduleHide();
         }
-        
-    }
 
+    }
 
     componentDidMount() {
 
@@ -111,15 +123,15 @@ class Portal extends Component {
     renderNode() {
 
         const {translateSpeed, prefix, animationTime, transitions, offset} = this.props;
-        
+
         portal.node = document.createElement('div');
 
         portal.node.className = prefix + ' ' + prefix + '__hidden';
         portal.node.style.position = 'absolute';
-        
+
         portal.node.style.top = `${offset}px`;
         portal.node.style.left = '0px';
-        
+
         document.body.appendChild(portal.node);
     }
 
@@ -134,7 +146,7 @@ class Portal extends Component {
         const nodeBounds = portal.node.getBoundingClientRect();
 
 
-        const top =  bounds.top + bounds.height;
+        const top = bounds.top + bounds.height;
         const left = bounds.left + bounds.width / 2 - nodeBounds.width / 2;
 
         portal.node.style.transform = `translate(${left}px, ${top}px)`;
@@ -153,7 +165,11 @@ class Portal extends Component {
         );
 
         this.updatePosition();
-    
+
+    }
+
+    getNode(){
+        return portal.node;
     }
 
     render() {
