@@ -8,7 +8,7 @@
 }
 
 // - By default the carret will be in middle 
-.popup:after {
+.popup::after{
 
 	bottom: 100%;
 	left: 50%;
@@ -52,10 +52,28 @@
 // - Add padding to the content instead of the portal node 
 .popup-content{
   padding: 10px;
-  font-size: 32px;
+  
   width: 320px;
 }
 
+// - Just a simple triangle
+.triangle {
+
+	bottom: 100%;
+  left: 0;
+	border: solid transparent;
+	content: "";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+	border-color: rgba(29, 39, 46, 0);
+	border-bottom-color: orangered;
+	border-width: 10px;
+
+  // - If you want to animate the carret
+  transition: all 0.5s ease;
+}
 
 
 // ------------------------------------- OTHER STUFF 
@@ -70,15 +88,11 @@ hr {
   clear: both;
 }
 
-.attach-to-border-right{
+.attach-to-border{
   position: absolute;
-  right: -7%;
 }
 
-.attach-to-border-left{
-  position: absolute;
-  left: -7%;
-}
+
 
 body {
   background: linear-gradient(to left, #141E30 , #243B55);
@@ -120,3 +134,4 @@ body {
   width: 210px;
   height: 30px;
 }
+

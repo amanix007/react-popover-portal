@@ -1,13 +1,15 @@
 import React from 'react';
-import Popover, {arrowPositions} from '../../../src/index';
+import Popover from '../../../src/index';
 
 class Outsider extends React.Component {
     constructor() {
         super();
-        this.state = { open: false};
+        this.state = { open: false, arrowPositionY: 0};
 
         this.hidePopup = this.hidePopup.bind(this);
         this.displayPopup = this.displayPopup.bind(this);
+        this.updateArrowPosition = this.updateArrowPosition.bind(this);
+        
     }
 
     hidePopup() {
@@ -18,26 +20,34 @@ class Outsider extends React.Component {
         this.setState({ open: true });
     }
 
+    updateArrowPosition(arrowPositionY){
+        this.setState({arrowPositionY:arrowPositionY});
+    }
+
 
     render() {
 
         return (
 
             <div>
-                <p 
-                style={{background: 'rgba(0, 0, 0, 0.4)', padding: '10px'}}
-                onMouseEnter={this.displayPopup} onMouseLeave={this.hidePopup} className={this.props.right ? 'attach-to-border-right' : 'attach-to-border-left'}
+                <p
+                style={this.props.style} 
+                onMouseEnter={this.displayPopup} onMouseLeave={this.hidePopup} className='attach-to-border'
                 id={this.props.id}>
-                    This parent should be half visible
+                    This parent uses smart popup
                 </p>
                 <Popover
                     prefix='popup' parent={'#' + this.props.id}
-                    animationTime={3000}
-                    translateSpeed={3000}
+                    getArrowPosition={this.updateArrowPosition}
+                    arrowWidth={10}
                     open={this.state.open}>
+
+                    <span className='triangle' style={{left: this.state.arrowPositionY}}></span>
                     <div className={'popup-content'}>
                         I am always in viewport
+                        <h4>Notice my red arrow</h4>
                     </div>
+                    
                 </Popover>
             </div>
         );

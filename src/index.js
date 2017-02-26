@@ -6,11 +6,6 @@ const portal = {
     timer: null
 };
 
-export const arrowPositions = {
-    LEFT: 'left',
-    CENTER: 'center',
-    RIGHT: 'right'
-}
 
 /**
  * The popover content gets rendered to this component
@@ -26,6 +21,8 @@ const Popover = (props) => {
     );
 }
 
+
+
 /**
  * Controls the portal close and render
  */
@@ -35,6 +32,7 @@ class Portal extends Component {
 
         open: PropTypes.bool.isRequired,
         parent: PropTypes.string.isRequired,
+        arrowWidth: PropTypes.number,
 
         // - Settings 
         prefix: PropTypes.string,                                   // - Prefix used to add classes to portal node 
@@ -67,9 +65,9 @@ class Portal extends Component {
         }]
     }
 
-    constructor(){
+    constructor() {
         super();
-        this.arrowPosition = null;
+        this.arrowPosition = {value: 0, class: 'center'};
     }
 
     /**
@@ -87,15 +85,15 @@ class Portal extends Component {
         portal.node.classList.remove(prefix + '__hidden');
 
         // - Add arrow classes 
-        if(this.arrowPosition == arrowPositions.LEFT){
+        if (this.arrowPosition.class == 'left') {
             portal.node.classList.add(prefix + '-arrow__left');
             portal.node.classList.remove(prefix + '-arrow__right');
-        
-        }else if(this.arrowPosition == arrowPositions.RIGHT){
+
+        } else if (this.arrowPosition.class == 'right') {
             portal.node.classList.add(prefix + '-arrow__right');
             portal.node.classList.remove(prefix + '-arrow__left');
         }
-        else{
+        else {
             portal.node.classList.remove(prefix + '-arrow__left');
             portal.node.classList.remove(prefix + '-arrow__right');
         }
@@ -185,34 +183,44 @@ class Portal extends Component {
      * @param leftPosition float : the left position of the element  
      * @return float : offset 
      */
-    calculateOffsetVertical(leftPosition, popupWidth){
+    calculateOffsetVertical(left, popupWidth) {
 
-        if(leftPosition - popupWidth / 2 < 0) return leftPosition - 5;
-        else if(leftPosition + popupWidth / 2 > window.innerWidth) return leftPosition + popupWidth - window.innerWidth - document.body.scrollLeft + 5;
-        
+        if(left < 0) {
+            return left - 5;
+        }else if(left + popupWidth > document.body.clientWidth){
+            return  left + popupWidth - document.body.clientWidth + 5;
+        }
+
         return 0;
+
     }
 
     /**
      * Calculates the gap between parent and arrow 
      * Negative values means that arrow should be moved to left
      */
-    notifyArrowPosition(offset){
+    notifyArrowPosition(offset, popupWidth) {
 
-        const { getArrowPosition } = this.props;
 
-        let result = arrowPositions.CENTER;
+        const { getArrowPosition, arrowWidth } = this.props;
+        if(!getArrowPosition) return null;
 
-        // - Parent is at left
-        if(offset < 0) result = arrowPositions.LEFT;
-        // - Parent is at right
-        else if(offset > 0) result = arrowPositions.RIGHT;
+        let position;
 
-        // - Only callback when the result is difference this time, prevents unecessary callback 
-        if(result !== this.arrowPosition && getArrowPosition) getArrowPosition(result);
+        if(offset == 0){
+            position = popupWidth / 2;
+        }else if(offset < 0){
+            position = offset + popupWidth / 2;
+        }else{
+            position = offset + popupWidth / 2  - arrowWidth * 2;
+        }
 
-        this.arrowPosition = result;
+        if(this.arrowPosition.value == position) return null;
 
+        getArrowPosition(position);
+
+        this.arrowPosition.value = position;
+        this.arrowPosition.class = offset == 0 ? 'center' : offset < 0 ? 'left' : 'right';
     }
 
     /**
@@ -237,12 +245,11 @@ class Portal extends Component {
         let left = windowScrollVertical + parentBounds.left + parentBounds.width / 2 - nodeBounds.width / 2;
 
         const offset = this.calculateOffsetVertical(left, nodeBounds.width);
-
         left -= offset;
 
         portal.node.style.transform = `translate(${left}px, ${top}px)`;
 
-        this.notifyArrowPosition(offset);
+        this.notifyArrowPosition(offset, nodeBounds.width);
 
     }
 
@@ -267,7 +274,7 @@ class Portal extends Component {
     /**
      * Returns the portal node 
      */
-    getNode(){
+    getNode() {
         return portal.node;
     }
 

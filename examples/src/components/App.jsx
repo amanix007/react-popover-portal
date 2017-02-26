@@ -5,7 +5,7 @@ import '../styles';
 
 // - External components
 import Icon from './Icon';
-import Outsider from './Outsider'; // - LOL
+import Outsider from './AutoArrow'; // - LOL
 
 class App extends React.Component {
 
@@ -47,8 +47,13 @@ class App extends React.Component {
             icon={icon} />)}
         </div>
         
-        <Outsider right={true} id='right'/>
-        <Outsider right={false} id='left'/>
+        <Outsider id='right' style={{left: '-5%'}}/>
+        <Outsider id='right1' style={{left: '12%', top: '200px'}}/>
+        <Outsider id='right2' style={{left: '3%', top:' 300px'}}/>
+        <Outsider id='left' style={{right: '-5%'}}/>
+        <Outsider id='left2' style={{right: '3%', top:' 50px'}}/>
+        <Outsider id='left4' style={{right: '1%', top:' 300px'}}/>
+        <Outsider id='left3' style={{right: '10%', top: '100px'}}/>
 
         <hr />
 
