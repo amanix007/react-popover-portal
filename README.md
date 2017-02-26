@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/onurhb/react-popover-portal.svg?branch=master)](https://travis-ci.org/onurhb/react-popover-portal)
+
 # react-popover-portal
 A simple popover that renders to the body. Accelerated translation between nodes.  <br/>
 
