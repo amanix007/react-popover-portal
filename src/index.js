@@ -57,6 +57,7 @@ class Portal extends Component {
         prefix: 'rpp',
         timeout: 1000,
         offset: 10,
+        arrowWidth: 0,
         animationTime: 420,
         translateSpeed: 310,
         transitions: [{
