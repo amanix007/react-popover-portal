@@ -6,10 +6,10 @@ const portal = {
     timer: null
 };
 
-export const arrowPosition = {
-    LEFT: 'LEFT',
-    CENTER: 'CENTER',
-    RIGHT: 'RIGHT'
+export const arrowPositions = {
+    LEFT: 'left',
+    CENTER: 'center',
+    RIGHT: 'right'
 }
 
 /**
@@ -32,22 +32,27 @@ const Popover = (props) => {
 class Portal extends Component {
 
     static propTypes = {
+
         open: PropTypes.bool.isRequired,
         parent: PropTypes.string.isRequired,
 
         // - Settings 
-        prefix: PropTypes.string,
-        timeout: PropTypes.number,
-        offset: PropTypes.number,
+        prefix: PropTypes.string,                                   // - Prefix used to add classes to portal node 
+        timeout: PropTypes.number,                                  // - Time to disappear
+        offset: PropTypes.number,                                   // - Offset to parent
 
         // - Animations 
-        animationTime: PropTypes.number,
-        translateSpeed: PropTypes.number,
-        transitions: PropTypes.arrayOf(PropTypes.object),
+        animationTime: PropTypes.number,                            // - The animation speed
+        translateSpeed: PropTypes.number,                           // - How fast the portal translates between nodes
+        transitions: PropTypes.arrayOf(PropTypes.object),           // - List of transitions {name: opacity and height... , type: ease and ease-out...}
 
         // - Events 
-        onMouseEnter: PropTypes.func,
-        onMouseLeave: PropTypes.func
+        onMouseEnter: PropTypes.func,                               // - mouseEnters the popup
+        onMouseLeave: PropTypes.func,                               // - mouseLeaves the popup
+
+        // - Callbacks
+        getArrowPosition: PropTypes.func                            // - suggests an arrow position 
+
     }
 
     static defaultProps = {
@@ -55,7 +60,7 @@ class Portal extends Component {
         timeout: 1000,
         offset: 10,
         animationTime: 420,
-        translateSpeed: 210,
+        translateSpeed: 310,
         transitions: [{
             name: 'all',
             type: 'ease'
@@ -78,8 +83,22 @@ class Portal extends Component {
         clearTimeout(portal.timer);
 
         // - Add classes when portal is open
-        portal.node.classList.add(this.props.prefix + '__active');
-        portal.node.classList.remove(this.props.prefix + '__hidden');
+        portal.node.classList.add(prefix + '__active');
+        portal.node.classList.remove(prefix + '__hidden');
+
+        // - Add arrow classes 
+        if(this.arrowPosition == arrowPositions.LEFT){
+            portal.node.classList.add(prefix + '-arrow__left');
+            portal.node.classList.remove(prefix + '-arrow__right');
+        
+        }else if(this.arrowPosition == arrowPositions.RIGHT){
+            portal.node.classList.add(prefix + '-arrow__right');
+            portal.node.classList.remove(prefix + '-arrow__left');
+        }
+        else{
+            portal.node.classList.remove(prefix + '-arrow__left');
+            portal.node.classList.remove(prefix + '-arrow__right');
+        }
 
         // - Styles
         let mTransitions = '';
@@ -95,7 +114,6 @@ class Portal extends Component {
      * Adds animation classes and removes the app from DOM when the animation is finish 
      */
     scheduleHide() {
-
 
         const { prefix, timeout, animationTime } = this.props;
         // - Prevent other components from removing the portal 
@@ -121,8 +139,8 @@ class Portal extends Component {
         const { open } = props;
 
         if (open) {
-            this.displayPortal();
             this.renderPopup(props);
+            this.displayPortal();
         }
         else {
             this.scheduleHide();
@@ -181,19 +199,17 @@ class Portal extends Component {
      */
     notifyArrowPosition(offset){
 
-
         const { getArrowPosition } = this.props;
-        if(!getArrowPosition) return;
 
-        let result = arrowPosition.CENTER;
+        let result = arrowPositions.CENTER;
 
         // - Parent is at left
-        if(offset < 0) result = arrowPosition.LEFT;
+        if(offset < 0) result = arrowPositions.LEFT;
         // - Parent is at right
-        else if(offset > 0) result = arrowPosition.RIGHT;
+        else if(offset > 0) result = arrowPositions.RIGHT;
 
         // - Only callback when the result is difference this time, prevents unecessary callback 
-        if(result !== this.arrowPosition ) getArrowPosition(result);
+        if(result !== this.arrowPosition && getArrowPosition) getArrowPosition(result);
 
         this.arrowPosition = result;
 

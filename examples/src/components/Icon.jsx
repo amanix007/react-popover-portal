@@ -62,7 +62,7 @@ class Icon extends Component {
                 prefix='popup' parent={'#' + this.props.parent} 
                 open={this.state.open} 
                 onMouseEnter={this.onPopupHover} onMouseLeave={this.onPopupLeave}>
-                    <div className='popup-content popup-arrow__CENTER'>
+                    <div className='popup-content'>
                        <h1>{icon}</h1>
                     </div>
                 </Popover>

@@ -51,6 +51,8 @@ class App extends React.Component {
         <Outsider right={false} id='left'/>
 
         <hr />
+
+        <h2>These affects the parents above</h2>
         <p>You can specify which node the popup should attach itself to. The content will always change. Press the button below to see the popup attach to the header.</p>
         <button className='btnflt3' onClick={this.toggleAttatchToFirstParent.bind(this)}>{this.state.attachToHead ? 'Attach to individual parent' : 'Attach popup to head'}</button>
         <p>I guess you want to change the animation speed to: </p>

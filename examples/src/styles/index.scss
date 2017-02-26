@@ -1,5 +1,84 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 
+// - Dont add padding to the portal node
+// - onMouseEnter will not trigger because the padding "pushes" your popup-content which onMouseEnter relies on (if you want to keep the popup open when hovering it) 
+.popup {
+	background: rgba(0, 0, 0, 0.7);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+
+// - By default the carret will be in middle 
+.popup:after {
+
+	bottom: 100%;
+	left: 50%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+	border-color: rgba(29, 39, 46, 0);
+	border-bottom-color: black;
+	border-width: 10px;
+	margin-left: -10px;
+
+  // - If you want to animate the carret
+  transition: all 0.5s ease;
+}
+
+// - Move carret to left 
+.popup-arrow__left:after {
+  left: 5%;
+}
+
+// - Move carret to right 
+.popup-arrow__right:after {
+	left: 95%;
+}
+
+// - Hide animation 
+.popup__hidden{
+  opacity: 0;
+  background: floralwhite;
+}
+
+// - Active animation 
+.popup__active{
+  opacity: 1;
+	background: rgba(0, 0, 0, 0.9);
+}
+
+// - Add padding to the content instead of the portal node 
+.popup-content{
+  padding: 10px;
+  font-size: 32px;
+  width: 320px;
+}
+
+
+
+// ------------------------------------- OTHER STUFF 
+hr {
+  border: 0;
+  height: 1px;
+  background-image: -webkit-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0));
+  background-image:    -moz-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0));
+  background-image:     -ms-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0));
+  background-image:      -o-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0));
+  margin: 10px 0 30px;
+  clear: both;
+}
+
+.attach-to-border-right{
+  position: absolute;
+  right: -7%;
+}
+
+.attach-to-border-left{
+  position: absolute;
+  left: -7%;
+}
 
 body {
   background: linear-gradient(to left, #141E30 , #243B55);
@@ -40,94 +119,4 @@ body {
   font-size: 24px;
   width: 210px;
   height: 30px;
-}
-
-.popup {
-	background: rgba(0, 0, 0, 0.7);
-  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-  backface-visibility: hidden;
-}
-
-.popup-arrow__CENTER:after {
-	bottom: 100%;
-	left: 50%;
-	border: solid transparent;
-	content: " ";
-	height: 0;
-	width: 0;
-	position: absolute;
-	pointer-events: none;
-	border-color: rgba(29, 39, 46, 0);
-	border-bottom-color: black;
-	border-width: 10px;
-	margin-left: -10px;
-}
-
-.popup-arrow__LEFT:after {
-	bottom: 100%;
-  left: 10px;
-	border: solid transparent;
-	content: " ";
-	height: 0;
-	width: 0;
-	position: absolute;
-	pointer-events: none;
-	border-color: rgba(29, 39, 46, 0);
-	border-bottom-color: black;
-	border-width: 10px;
-	margin-left: -10px;
-}
-
-.popup-arrow__RIGHT:after {
-	bottom: 100%;
-	right: 10px;
-	border: solid transparent;
-	content: " ";
-	height: 0;
-	width: 0;
-	position: absolute;
-	pointer-events: none;
-	border-color: rgba(29, 39, 46, 0);
-	border-bottom-color: black;
-	border-width: 10px;
-	margin-left: -10px;
-}
-
-.popup__hidden{
-  opacity: 0;
-  background: floralwhite;
-}
-
-.popup__active{
-  opacity: 1;
-	background: rgba(0, 0, 0, 0.9);
-}
-
-
-
-.popup-content{
-  padding: 10px;
-  font-size: 32px;
-  width: 320px;
-}
-
-hr {
-  border: 0;
-    height: 1px;
-  background-image: -webkit-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0));
-    background-image:    -moz-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0));
-    background-image:     -ms-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0));
-    background-image:      -o-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0));
-    margin: 10px 0 30px;
-      clear: both;
-}
-
-.attach-to-border-right{
-  position: absolute;
-  right: -7%;
-}
-
-.attach-to-border-left{
-  position: absolute;
-  left: -7%;
 }
