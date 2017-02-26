@@ -42,6 +42,7 @@ class Portal extends Component {
         // - Animations 
         animationTime: PropTypes.number,                            // - The animation speed
         translateSpeed: PropTypes.number,                           // - How fast the portal translates between nodes
+        translateEase: PropTypes.string,
         transitions: PropTypes.arrayOf(PropTypes.object),           // - List of transitions {name: opacity and height... , type: ease and ease-out...}
 
         // - Events 
@@ -59,10 +60,11 @@ class Portal extends Component {
         offset: 10,
         arrowWidth: 0,
         animationTime: 420,
-        translateSpeed: 310,
+        translateSpeed: 420,
+        translateEase: 'ease-in-out',
         transitions: [{
             name: 'all',
-            type: 'ease'
+            ease: 'ease'
         }]
     }
 
@@ -76,20 +78,21 @@ class Portal extends Component {
      */
     displayPortal() {
 
-        const {translateSpeed, prefix, animationTime, transitions} = this.props;
+        const {translateSpeed, prefix, animationTime, transitions, translateEase} = this.props;
 
         // - Prevent other components from removing the portal 
         clearTimeout(portal.timer);
 
         // - Add classes when portal is open
+        portal.node.className = prefix 
         portal.node.classList.add(prefix + '__active');
         portal.node.classList.remove(prefix + '__hidden');
 
         // - Styles
         let mTransitions = '';
-        transitions.map((transition) => mTransitions += `${transition.name} ${animationTime}ms ${transition.type},`)
+        transitions.map((transition) => mTransitions += `${transition.name} ${animationTime}ms ${transition.ease},`)
 
-        mTransitions += `transform ${translateSpeed <= 0 ? 1 : translateSpeed}ms ease`;
+        mTransitions += `transform ${translateSpeed < 0 ? 1 : translateSpeed}ms ${translateEase}`;
 
         portal.node.style.transition = mTransitions;
 
@@ -153,8 +156,6 @@ class Portal extends Component {
         const {translateSpeed, prefix, animationTime, transitions, offset} = this.props;
 
         portal.node = document.createElement('div');
-
-        portal.node.className = prefix + ' ' + prefix + '__hidden';
         portal.node.style.position = 'absolute';
 
         portal.node.style.top = `${offset}px`;
@@ -190,6 +191,7 @@ class Portal extends Component {
 
 
         const { getArrowPosition, arrowWidth } = this.props;
+
         if(!getArrowPosition) return;
 
         let position;
@@ -222,20 +224,20 @@ class Portal extends Component {
         const parentEl = document.querySelector(parent);
 
         const parentBounds = parentEl.getBoundingClientRect();
-        const nodeBounds = portal.node.getBoundingClientRect();
+        const portalBounds = portal.node.getBoundingClientRect();
 
         // - Attach to parent and include horizontal scroll offset  
         let top = windowScrollHorizontal + parentBounds.top + parentBounds.height;
 
         // - Attach to middle of parent and also include the vertical scroll offset 
-        let left = windowScrollVertical + parentBounds.left + parentBounds.width / 2 - nodeBounds.width / 2;
+        let left = windowScrollVertical + parentBounds.left + parentBounds.width / 2 - portalBounds.width / 2;
 
-        const offset = this.calculateOffsetVertical(left, nodeBounds.width);
+        const offset = this.calculateOffsetVertical(left, portalBounds.width);
         left -= offset;
 
         portal.node.style.transform = `translate(${left}px, ${top}px)`;
 
-        this.notifyArrowPosition(offset, nodeBounds.width);
+        this.notifyArrowPosition(offset, portalBounds.width);
 
     }
 
@@ -250,11 +252,9 @@ class Portal extends Component {
         ReactDOM.unstable_renderSubtreeIntoContainer(
             this,
             <Popover {...other}>{children}</Popover>,
-            portal.node
+            portal.node,
+            () => this.updatePosition()
         );
-
-        this.updatePosition();
-
     }
 
     /**
