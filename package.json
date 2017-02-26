@@ -8,7 +8,7 @@
     "tests": "tests"
   },
   "scripts": {
-    "test": "mocha --watch --compilers js:./node_modules/babel-core/register ./tests/test.js",
+    "test": "mocha --compilers js:./node_modules/babel-core/register ./tests/test.js",
     "start": "./node_modules/.bin/babel src --watch --out-dir lib",
     "build": "./node_modules/.bin/babel src --out-dir lib",
     "prepublish": "npm run build"
