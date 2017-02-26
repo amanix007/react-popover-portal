@@ -15,7 +15,7 @@ body {
   color: whitesmoke;
 
   text-align: center;
-
+  overflow:hidden;
 }
 
 .app {
@@ -90,4 +90,14 @@ hr {
     background-image:      -o-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0));
     margin: 10px 0 30px;
       clear: both;
+}
+
+.attach-to-border-right{
+  position: absolute;
+  right: -18%;
+}
+
+.attach-to-border-left{
+  position: absolute;
+  left: -20%;
 }

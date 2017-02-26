@@ -56,6 +56,9 @@ class Portal extends Component {
         }]
     }
 
+    /**
+     * Adds animation to the popup node and renews all transition attributes so each parent decides the attributes 
+     */
     displayPortal() {
 
         const {translateSpeed, prefix, animationTime, transitions} = this.props;
@@ -75,9 +78,11 @@ class Portal extends Component {
 
         portal.node.style.transition = mTransitions;
 
-
     }
 
+    /**
+     * Adds animation classes and removes the app from DOM when the animation is finish 
+     */
     scheduleHide() {
 
 
@@ -97,6 +102,9 @@ class Portal extends Component {
 
     }
 
+    /**
+     * Renders the portal if it is open and schedules hide if close 
+     */
     componentWillReceiveProps(props) {
 
         const { open } = props;
@@ -111,6 +119,9 @@ class Portal extends Component {
 
     }
 
+    /**
+     * Initial 
+     */
     componentDidMount() {
 
         if (!portal.node) {
@@ -119,7 +130,10 @@ class Portal extends Component {
 
     }
 
-
+    /**
+     * Renders portal node used to render react app into 
+     * This node is added to the body and has animation capabilities 
+     */
     renderNode() {
 
         const {translateSpeed, prefix, animationTime, transitions, offset} = this.props;
@@ -135,24 +149,68 @@ class Portal extends Component {
         document.body.appendChild(portal.node);
     }
 
+    /**
+     * If the parent is out of screen vertically, 
+     * it will return a value which tells how much we should move the popup
+     * so it is fully visible 
+     * @param leftPosition float : the left position of the element  
+     * @return float : offset 
+     */
+    calculateOffsetVertical(leftPosition, popupWidth){
+
+        if(leftPosition - popupWidth / 2 < 0) return leftPosition;
+        else if(leftPosition + popupWidth / 2 > window.innerWidth) return leftPosition + popupWidth - window.innerWidth - document.body.scrollLeft;
+        
+        return 0;
+    }
+
+    /**
+     * Calculates the gap between parent and arrow 
+     */
+    getArrowGap(){
+
+        const { parent } = this.props;
+
+        const parentEl = document.querySelector(parent);
+
+        const parentBounds = parentEl.getBoundingClientRect();
+
+        const nodeBounds = portal.node.getBoundingClientRect();
+
+        console.log('parent left: ', parentBounds.left, 'popup left: ', nodeBounds.left);
+
+    }
+
+    /**
+     * Updates the portal node position using translate instead of top and left attributes
+     */
     updatePosition() {
 
         const { parent } = this.props;
 
+        const windowScrollVertical = document.body.scrollLeft;
+        const windowScrollHorizontal = document.body.scrollTop;
 
         const parentEl = document.querySelector(parent);
 
-        const bounds = parentEl.getBoundingClientRect();
+        const parentBounds = parentEl.getBoundingClientRect();
         const nodeBounds = portal.node.getBoundingClientRect();
 
+        // - Attach to parent and include horizontal scroll offset  
+        let top = windowScrollHorizontal + parentBounds.top + parentBounds.height;
 
-        const top = bounds.top + bounds.height;
-        const left = bounds.left + bounds.width / 2 - nodeBounds.width / 2;
+        // - Attach to middle of parent and also include the vertical scroll offset 
+        let left = windowScrollVertical + parentBounds.left + parentBounds.width / 2 - nodeBounds.width / 2;
+
+        left -= this.calculateOffsetVertical(left, nodeBounds.width);
 
         portal.node.style.transform = `translate(${left}px, ${top}px)`;
 
     }
 
+    /**
+     * Renders the react popup to the portal node 
+     */
     renderPopup(props) {
 
         // - Render portal 
@@ -168,10 +226,16 @@ class Portal extends Component {
 
     }
 
+    /**
+     * Returns the portal node 
+     */
     getNode(){
         return portal.node;
     }
 
+    /**
+     * Not used as we are using portals to render instead 
+     */
     render() {
         return null;
     }
