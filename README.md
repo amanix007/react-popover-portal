@@ -115,5 +115,6 @@ You can animate the popup when it appears or disappears. Simply add these classe
 ```
 > `{prefix}__active` will be added when the popover is visible and `{prefix}__hidden` will be added when the popover is closing. <br/>
 
-
+# Known issues
+- Popup children does not cover the whole area by default which results onMouseEnter or onMouseLeave not firing even when the mouse is hovering the popup. This happens only when you set height on the portal node. To prevent this issue, simply add display:flex to your popup class and height:100% to the popup child.   
 
