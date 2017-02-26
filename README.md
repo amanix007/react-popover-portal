@@ -3,6 +3,8 @@
 # react-popover-portal
 A simple popover that renders to the body. Accelerated translation between nodes.  <br/>
 
+`npm install -S react-popover-portal`
+
 [Demo](https://react-popover-portal.herokuapp.com/)
 
 ![GIF](https://raw.githubusercontent.com/onurhb/react-popover-portal/master/showcase.gif)
