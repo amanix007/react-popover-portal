@@ -48,7 +48,7 @@ body {
   backface-visibility: hidden;
 }
 
-.popup:after {
+.popup-arrow__CENTER:after {
 	bottom: 100%;
 	left: 50%;
 	border: solid transparent;
@@ -58,21 +58,51 @@ body {
 	position: absolute;
 	pointer-events: none;
 	border-color: rgba(29, 39, 46, 0);
-	border-bottom-color: rgba(0, 0, 0, 0.5);
+	border-bottom-color: black;
 	border-width: 10px;
 	margin-left: -10px;
 }
 
+.popup-arrow__LEFT:after {
+	bottom: 100%;
+  left: 10px;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+	border-color: rgba(29, 39, 46, 0);
+	border-bottom-color: black;
+	border-width: 10px;
+	margin-left: -10px;
+}
+
+.popup-arrow__RIGHT:after {
+	bottom: 100%;
+	right: 10px;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+	border-color: rgba(29, 39, 46, 0);
+	border-bottom-color: black;
+	border-width: 10px;
+	margin-left: -10px;
+}
 
 .popup__hidden{
   opacity: 0;
-  background: ghostwhite;
+  background: floralwhite;
 }
 
 .popup__active{
   opacity: 1;
 	background: rgba(0, 0, 0, 0.9);
 }
+
 
 
 .popup-content{
@@ -94,10 +124,10 @@ hr {
 
 .attach-to-border-right{
   position: absolute;
-  right: -18%;
+  right: -7%;
 }
 
 .attach-to-border-left{
   position: absolute;
-  left: -20%;
+  left: -7%;
 }

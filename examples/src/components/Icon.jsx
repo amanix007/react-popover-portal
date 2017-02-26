@@ -36,6 +36,7 @@ class Icon extends Component {
         // console.log('You are not hovering the popup content anymore');
     }
 
+
     render() {
 
         const {icon} = this.props;
@@ -61,7 +62,7 @@ class Icon extends Component {
                 prefix='popup' parent={'#' + this.props.parent} 
                 open={this.state.open} 
                 onMouseEnter={this.onPopupHover} onMouseLeave={this.onPopupLeave}>
-                    <div className='popup-content'>
+                    <div className='popup-content popup-arrow__CENTER'>
                        <h1>{icon}</h1>
                     </div>
                 </Popover>
