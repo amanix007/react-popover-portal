@@ -42,10 +42,10 @@ class Outsider extends React.Component {
                     arrowWidth={10}
                     open={this.state.open}>
 
-                    <span className='triangle' style={{left: this.state.arrowPositionY}}></span>
+                    <span className='triangle' style={{left: this.state.arrowPositionY, borderBottomColor: 'red'}}></span>
                     <div className={'popup-content'}>
                         I am always in viewport
-                        <h4>Notice my red arrow</h4>
+                        <h4>My carret is dynamic</h4>
                     </div>
                     
                 </Popover>

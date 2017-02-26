@@ -62,8 +62,10 @@ class Icon extends Component {
                 prefix='popup' parent={'#' + this.props.parent} 
                 open={this.state.open} 
                 onMouseEnter={this.onPopupHover} onMouseLeave={this.onPopupLeave}>
+                <span className='triangle' style={{left: '50%', borderBottomColor: 'black'}}></span>
                     <div className='popup-content'>
                        <h1>{icon}</h1>
+                       <h4>My carret is static</h4>
                     </div>
                 </Popover>
 

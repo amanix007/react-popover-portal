@@ -67,7 +67,7 @@ class Portal extends Component {
 
     constructor() {
         super();
-        this.arrowPosition = {value: 0, class: 'center'};
+        this.arrowPosition = 0;
     }
 
     /**
@@ -83,20 +83,6 @@ class Portal extends Component {
         // - Add classes when portal is open
         portal.node.classList.add(prefix + '__active');
         portal.node.classList.remove(prefix + '__hidden');
-
-        // - Add arrow classes 
-        if (this.arrowPosition.class == 'left') {
-            portal.node.classList.add(prefix + '-arrow__left');
-            portal.node.classList.remove(prefix + '-arrow__right');
-
-        } else if (this.arrowPosition.class == 'right') {
-            portal.node.classList.add(prefix + '-arrow__right');
-            portal.node.classList.remove(prefix + '-arrow__left');
-        }
-        else {
-            portal.node.classList.remove(prefix + '-arrow__left');
-            portal.node.classList.remove(prefix + '-arrow__right');
-        }
 
         // - Styles
         let mTransitions = '';
@@ -203,24 +189,23 @@ class Portal extends Component {
 
 
         const { getArrowPosition, arrowWidth } = this.props;
-        if(!getArrowPosition) return null;
+        if(!getArrowPosition) return;
 
         let position;
 
         if(offset == 0){
-            position = popupWidth / 2;
+            position = popupWidth / 2 - arrowWidth;
         }else if(offset < 0){
             position = offset + popupWidth / 2;
         }else{
             position = offset + popupWidth / 2  - arrowWidth * 2;
         }
 
-        if(this.arrowPosition.value == position) return null;
+        if(this.arrowPosition == position) return;
 
         getArrowPosition(position);
 
-        this.arrowPosition.value = position;
-        this.arrowPosition.class = offset == 0 ? 'center' : offset < 0 ? 'left' : 'right';
+        this.arrowPosition = position;
     }
 
     /**
