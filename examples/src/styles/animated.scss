@@ -1,0 +1,73 @@
+
+.popupAnimated {
+  background: rgba(73, 63, 51, 0.9);
+  color: black;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
+// - Just a simple triangle carret  
+.triangle {
+  bottom: 100%;
+  left: 0;
+  border: solid transparent;
+  content: "";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+  border-color: rgba(29, 39, 46, 0);
+  border-bottom-color: #E63C78;
+
+  border-width: 10px;
+  // - If you want to animate the carret
+  transition: all 0.5s ease;
+}
+
+// - Hide animation 
+.popupAnimated__hidden {
+  opacity: 0;
+  background: white;
+  height: 0
+}
+
+// - Active animation 
+.popupAnimated__active {
+  opacity: 1;
+  background: rgba(40, 33, 31, 0.9);
+  height: 100px;
+}
+
+// - Add padding to the content instead of the portal node 
+.popupAnimated-content {
+  padding: 10px;
+  width: 280px;
+  font-size: 24px;
+}
+
+
+// --------- A very special popup
+
+.popupAnimatedSpecial {
+  background: rgba(230, 33, 31, 0.9);
+  color: white;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
+// - Hide animation 
+.popupAnimatedSpecial__hidden {
+  opacity: 0;
+  background: deepskyblue;
+}
+
+// - Active animation 
+.popupAnimatedSpecial__active {
+  opacity: 1;
+  background: rgba(230, 33, 31, 0.9);
+}
+
+// - Add padding to the content instead of the portal node 
+.popupAnimatedSpecial-content {
+  padding: 10px;
+  width: 280px;
+  font-size: 24px;
+}

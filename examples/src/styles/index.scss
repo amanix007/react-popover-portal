@@ -1,60 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto');
-// - Dont add padding to the portal node
-// - onMouseEnter will not trigger because the padding "pushes" your popup-content which onMouseEnter relies on (if you want to keep the popup open when hovering it) 
-.popup {
-  background: rgba(0, 0, 0, 0.7);
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-}
 
-// - Just a simple triangle carret  
-.triangle {
-  bottom: 100%;
-  left: 0;
-  border: solid transparent;
-  content: "";
-  height: 0;
-  width: 0;
-  position: absolute;
-  pointer-events: none;
-  border-color: rgba(29, 39, 46, 0);
-  border-width: 10px;
-  // - If you want to animate the carret
-  transition: all 0.5s ease;
-}
-
-// - Hide animation 
-.popup__hidden {
-  opacity: 0;
-  background: floralwhite;
-}
-
-// - Active animation 
-.popup__active {
-  opacity: 1;
-  background: rgba(0, 0, 0, 0.9);
-}
-
-// - Add padding to the content instead of the portal node 
-.popup-content {
-  padding: 10px;
-  width: 280px;
-}
-
-// ------------------------------------- OTHER STUFF 
-hr {
-  border: 0;
-  height: 1px;
-  background-image: -webkit-linear-gradient(left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
-  background-image: -moz-linear-gradient(left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
-  background-image: -ms-linear-gradient(left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
-  background-image: -o-linear-gradient(left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
-  margin: 10px 0 30px;
-  clear: both;
-}
-
-.attach-to-border {
-  position: absolute;
-}
 
 body {
   background: linear-gradient(to left, #141E30, #243B55);
@@ -67,28 +12,39 @@ body {
   color: whitesmoke;
   text-align: center;
   overflow: hidden;
+  backface-visibility: hidden;
 }
+
+hr {
+  border: 0;
+  height: 1px;
+  background-image: -webkit-linear-gradient(left, rgba(0, 0, 0, 0), rgba(200, 200, 200, 0.75), rgba(0, 0, 0, 0));
+  background-image: -moz-linear-gradient(left, rgba(0, 0, 0, 0), rgba(200, 200, 200, 0.75), rgba(0, 0, 0, 0));
+  background-image: -ms-linear-gradient(left, rgba(0, 0, 0, 0), rgba(200, 200, 200, 0.75), rgba(0, 0, 0, 0));
+  background-image: -o-linear-gradient(left, rgba(0, 0, 0, 0), rgba(200, 200, 200, 0.75), rgba(0, 0, 0, 0));
+  margin: 10px 0 0;
+  clear: both;
+}
+
 
 .app {
   margin: 0 auto;
 }
 
-.container {
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
-  width: 910px;
-  margin-left: 25%;
+.app-content{
+  padding: 30px;
 }
 
 .box {
-  flex-grow: 1;
   background: rgba(0, 0, 0, 0.4);
   text-align: center;
   cursor: pointer;
   margin: 10px;
   padding: 10px;
   font-size: 24px;
-  width: 210px;
-  height: 30px;
+}
+
+.toolbar{
+    background: rgba(0, 0, 0, 0.25);
+    padding: 10px;
 }

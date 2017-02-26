@@ -5,9 +5,7 @@
   "description": "Project",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server",
-    "prod": "cross-env NODE_ENV=production webpack-dev-server",
     "build": "cross-env NODE_ENV=production webpack"
   },
   "license": "MIT",
@@ -32,10 +30,15 @@
     "webpack-dev-server": "2.2.0"
   },
   "dependencies": {
+    "connect": "^3.6.0",
+    "material-ui": "^0.17.0",
     "react": "15.4.2",
     "react-addons-css-transition-group": "^15.4.2",
     "react-addons-transition-group": "^15.4.2",
     "react-dom": "15.4.2",
-    "react-popover-portal": "^0.0.3"
+    "react-popover-portal": "^0.0.3",
+    "react-router": "^3.0.2",
+    "react-tap-event-plugin": "^2.0.1",
+    "serve-static": "^1.12.0"
   }
 }

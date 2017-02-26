@@ -1,76 +1,65 @@
 import React from 'react';
+import { Link } from 'react-router';
+
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+
+import FlatButton from 'material-ui/FlatButton';
+
+// - Just som meterial-ui stuff
+injectTapEventPlugin();
 
 // - External styles
 import '../styles';
-
-// - External components
-import Icon from './Icon';
-import Outsider from './AutoArrow'; // - LOL
 
 class App extends React.Component {
 
   constructor() {
     super();
-    this.state = { icons: ['A', 'B', 'C', 'D', 'E'], attachToHead: false, animationTime: 400, translateSpeed: 410, timeout: 1000 };
+    this.state = { activeIndex: 0 }
   }
 
-  toggleAttatchToFirstParent() {
-    this.setState({ attachToHead: !this.state.attachToHead });
+  setActiveIndex(index) {
+    this.setState({ activeIndex: index })
   }
 
-  onAnimationSpeedChange(e) {
-    this.setState({ animationTime: Number(e.target.value) })
-  }
-
-  onTransitionSpeedChange(e) {
-    this.setState({ translateSpeed: Number(e.target.value) })
-  }
-
-  onTimeoutChange(e) {
-    this.setState({ timeout: Number(e.target.value) })
-  }
 
   render() {
 
     return (
 
-      <div className='app'>
+      <MuiThemeProvider>
+        <div className='app'>
 
-        <h1 id="head" style={{ fontSize: '92px', marginBottom: '200px' }}>react-popover-portal</h1>
+          <a href="https://github.com/onurhb/react-popover-portal"><img style={{position: 'absolute', top: '0px', right: '0px', border: '0px'}} src="https://camo.githubusercontent.com/52760788cde945287fbb584134c4cbc2bc36f904/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f77686974655f6666666666662e706e67" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png"/></a>
 
-        <div className="container">
-          {this.state.icons.map(icon => <Icon key={icon}
-            animationTime={this.state.animationTime}
-            translateSpeed={this.state.translateSpeed}
-            timeout={this.state.timeout}
-            parent={this.state.attachToHead ? 'head' : icon}
-            icon={icon} />)}
+          <h1 id="head" style={{ fontSize: '72px' }}>react-popover-portal</h1>
+
+          <div className="row center-xs between-xs toolbar">
+            <div className="col-xs-2">
+              <FlatButton backgroundColor={this.state.activeIndex == 0 ? 'rgba(255, 255, 255, 0.1)' : null} 
+              containerElement={<Link to="/" />} label="Basic use" secondary={true} onClick={this.setActiveIndex.bind(this, 0)} />
+            </div>
+            <div className="col-xs-2">
+              <FlatButton backgroundColor={this.state.activeIndex == 1 ? 'rgba(255, 255, 255, 0.1)' : null} 
+              containerElement={<Link to="/arrow" />} label="With dynamic arrow" secondary={true} onClick={this.setActiveIndex.bind(this, 1)} />
+
+            </div>
+            <div className="col-xs-2">
+              <FlatButton backgroundColor={this.state.activeIndex == 2 ? 'rgba(255, 255, 255, 0.1)' : null} 
+              containerElement={<Link to="/animated" />} label="Animated" secondary={true} onClick={this.setActiveIndex.bind(this, 2)} />
+
+            </div>
+          </div>
+
+
+          <div className="app-content">
+            {this.props.children}
+          </div>
+
         </div>
-        
-        <Outsider id='right' style={{left: '-5%'}}/>
-        <Outsider id='right1' style={{left: '12%', top: '200px'}}/>
-        <Outsider id='right2' style={{left: '3%', top:' 300px'}}/>
-        <Outsider id='left' style={{right: '-5%'}}/>
-        <Outsider id='left2' style={{right: '3%', top:' 50px'}}/>
-        <Outsider id='left4' style={{right: '1%', top:' 300px'}}/>
-        <Outsider id='left3' style={{right: '10%', top: '100px'}}/>
-
-        <hr />
-
-        <h2>These affects the parents above</h2>
-        <p>You can specify which node the popup should attach itself to. The content will always change. Press the button below to see the popup attach to the header.</p>
-        <button className='btnflt3' onClick={this.toggleAttatchToFirstParent.bind(this)}>{this.state.attachToHead ? 'Attach to individual parent' : 'Attach popup to head'}</button>
-        <p>I guess you want to change the animation speed to: </p>
-        <input type="number" step="50" value={this.state.animationTime} onChange={this.onAnimationSpeedChange.bind(this)} />
-
-        <p>Maybe you want to control the speed of translation: </p>
-        <input type="number" step="50" value={this.state.translateSpeed} onChange={this.onTransitionSpeedChange.bind(this)} />
-
-        <p>Yep, you want to change how long the popup should stay visible: </p>
-        <input type="number" step="50" value={this.state.timeout} onChange={this.onTimeoutChange.bind(this)} />
-
-
-      </div>
+      </MuiThemeProvider>
 
     );
   }
