@@ -6,7 +6,6 @@ const portal = {
     timer: null
 };
 
-
 /**
  * The popover content gets rendered to this component
  */
@@ -43,7 +42,7 @@ class Portal extends Component {
         animationTime: PropTypes.number,                            // - The animation speed
         translateSpeed: PropTypes.number,                           // - How fast the portal translates between nodes
         translateEase: PropTypes.string,
-        transitions: PropTypes.arrayOf(PropTypes.object),           // - List of transitions {name: opacity and height... , type: ease and ease-out...}
+        transitions: PropTypes.arrayOf(PropTypes.object),           // - List of transitions {name: opacity and height... , ease: ease and ease-out...}
 
         // - Events 
         onMouseEnter: PropTypes.func,                               // - mouseEnters the popup
@@ -104,6 +103,7 @@ class Portal extends Component {
     scheduleHide() {
 
         const { prefix, timeout, animationTime } = this.props;
+
         // - Prevent other components from removing the portal 
         clearTimeout(portal.timer);
 
@@ -157,6 +157,7 @@ class Portal extends Component {
 
         portal.node = document.createElement('div');
         portal.node.style.position = 'absolute';
+        portal.node.style.display  = 'flex';
 
         portal.node.style.top = `${offset}px`;
         portal.node.style.left = '0px';
@@ -196,16 +197,18 @@ class Portal extends Component {
 
         let position;
 
+        // - Calculate how much to offset so arrow is always pointing to parent 
         if(offset == 0){
-            position = popupWidth / 2 - arrowWidth;
+            position = popupWidth / 2 - arrowWidth;     // - Is middle 
         }else if(offset < 0){
-            position = offset + popupWidth / 2;
-        }else{
-            position = offset + popupWidth / 2  - arrowWidth * 2;
+            position = offset + popupWidth / 2;         // - Is left  
+        }else{  
+            position = offset + popupWidth / 2  - arrowWidth * 2;   // - Is right
         }
 
         if(this.arrowPosition == position) return;
 
+        // - Fire callback 
         getArrowPosition(position);
 
         this.arrowPosition = position;
@@ -232,11 +235,13 @@ class Portal extends Component {
         // - Attach to middle of parent and also include the vertical scroll offset 
         let left = windowScrollVertical + parentBounds.left + parentBounds.width / 2 - portalBounds.width / 2;
 
+        // - Incase the popup goes out of screen 
         const offset = this.calculateOffsetVertical(left, portalBounds.width);
         left -= offset;
 
         portal.node.style.transform = `translate(${left}px, ${top}px)`;
 
+        // - Callback so user can update arrow position 
         this.notifyArrowPosition(offset, portalBounds.width);
 
     }

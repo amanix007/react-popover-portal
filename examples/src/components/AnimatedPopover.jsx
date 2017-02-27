@@ -28,6 +28,19 @@ updateArrowPosition(arrowPositionX){
 
 
   render() {
+
+    // - By default react-popover-portal uses transition on all attributes, you can override it 
+    const transitions = [
+      {
+        name: 'opacity',
+        ease: 'ease'
+      },{
+        name: 'background',
+        ease: 'ease-in-out'
+      }
+    ] 
+    
+
     return(
     <div>
         <div className="box" style={this.props.style} onMouseEnter={this.displayPopup} onMouseLeave={this.hidePopup} id={this.props.id}>

@@ -1,11 +1,7 @@
 
-.popupAnimated {
-  background: rgba(73, 63, 51, 0.9);
-  color: black;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-}
 
-// - Just a simple triangle carret  
+
+// - Just a simple arrow carret  
 .triangle {
   bottom: 100%;
   left: 0;
@@ -23,6 +19,13 @@
   transition: all 0.5s ease;
 }
 
+// -------------------------------------------------------------------------- Popup 1
+.popupAnimated {
+  background: rgba(73, 63, 51, 0.9);
+  color: lightgrey;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
 // - Hide animation 
 .popupAnimated__hidden {
   opacity: 0;
@@ -34,40 +37,45 @@
 .popupAnimated__active {
   opacity: 1;
   background: rgba(40, 33, 31, 0.9);
-  height: 100px;
+  height: 200px;
 }
 
 // - Add padding to the content instead of the portal node 
 .popupAnimated-content {
   padding: 10px;
-  width: 280px;
   font-size: 24px;
+  height: 100%;
 }
 
 
-// --------- A very special popup
+// -------------------------------------------------------------------------- Popup 2
 
 .popupAnimatedSpecial {
   background: rgba(230, 33, 31, 0.9);
   color: white;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  display: flex;
+}
+
+// - Add padding to the content instead of the portal node 
+.popupAnimatedSpecial-content {
+  padding: 10px;
+  font-size: 24px;
+  height: 100%;
 }
 
 // - Hide animation 
 .popupAnimatedSpecial__hidden {
   opacity: 0;
   background: deepskyblue;
+  height: 0;
 }
 
 // - Active animation 
 .popupAnimatedSpecial__active {
   opacity: 1;
   background: rgba(230, 33, 31, 0.9);
+  height: 100px;
 }
 
-// - Add padding to the content instead of the portal node 
-.popupAnimatedSpecial-content {
-  padding: 10px;
-  width: 280px;
-  font-size: 24px;
-}
+

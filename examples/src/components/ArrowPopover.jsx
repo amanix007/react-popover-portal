@@ -29,15 +29,7 @@ updateArrowPosition(arrowPositionX){
 
   render() {
 
-    const transitions = [
-      {
-        name: 'opacity',
-        ease: 'ease'
-      },{
-        name: 'background',
-        ease: 'ease-in-out'
-      }
-    ] 
+
     return(
     <div>
         <div className="box" style={this.props.style} onMouseEnter={this.displayPopup} onMouseLeave={this.hidePopup} id={this.props.id}>
@@ -45,7 +37,7 @@ updateArrowPosition(arrowPositionX){
         </div>
 
          <Popover 
-            getArrowPosition={this.updateArrowPosition.bind(this)} arrowWidth={10} transitions={transitions}
+            getArrowPosition={this.updateArrowPosition.bind(this)} arrowWidth={10} 
             prefix='popupArrow' parent={'#' + this.props.id} onMouseEnter={this.displayPopup} onMouseLeave={this.hidePopup} open={this.state.open}>
                 <span className='triangle' style={{left: this.state.arrowPositionX}}></span>
                 <div className='popupArrow-content'>
