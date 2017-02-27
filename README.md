@@ -107,7 +107,7 @@ You can even animate the carret as I have done in examples.
 ### Animate 
 You can animate the popup when it appears or disappears. Simply add these classes to your css (with popup as prefix):  
 
-```
+```css
 .popup__hidden{
   opacity: 0;
 }
@@ -115,16 +115,15 @@ You can animate the popup when it appears or disappears. Simply add these classe
 .popup__active{
   opacity: 1;
 }
+```
 
 > See `/examples/src/styles/animated.scss` and `/examples/src/components/AnimatedPopover.jsx`
-
-```
 > NB !`{prefix}__active`  and `{prefix}__hidden` will be added to the portal node.
 
 # Known issues
 
-- When you set the height of the popup in your css file (eg. animating it from 0px to 200px) the children will still have a fixed height.  
-Because the onMouseEnter and onMouseLeave is listening on child events, the popup will close even when the user is hovering the popup.    
+- When you set the height of the popup in your css file (eg. animating it from 0px to 200px) the children will still have a fixed height.
+Because the onMouseEnter and onMouseLeave is listening on child events, the popup will close even when the user is hovering the popup.
 If you need to set the height, simply add `display:flex` to the popup class and 'height:100%' to the container child to force it to cover the popup. 
 
 - Animating the width is problematic as it is used to calculate popover position before attaching it to the parent.
