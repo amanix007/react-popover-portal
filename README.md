@@ -28,14 +28,16 @@ updateArrowPosition(arrowPosition){
 render(){
   return (<div>
       <p
-      onMouseEnter={this.displayPopup} 
-      onMouseLeave={this.hidePopup}
-      id='parent'> The parent </p>
+      onMouseEnter={this.displayPopup} onMouseLeave={this.hidePopup}
+      id='parent'> 
+      The parent 
+      </p>
 
       <Popover
           prefix='popup' parent='#parent'
           getArrowPosition={this.updateArrowPosition}
           arrowWidth={10}
+          onMouseEnter={this.displayPopup} onMouseLeave={this.hidePopup}
           open={this.state.open}>
 
           <span className='triangle' 
@@ -83,7 +85,8 @@ render(){
 |:-------------------:|:-------------------------------------------------------------------------------------:	|:--------------:	|:------------:	|:-------------------------:|
 |     parent     	    |                        The DOM element to attach the popover to                       	| document query 	|   required   	|       -       	          |
 |      open      	    |                           If the popover should open or not                           	|      bool      	|   required   	|       -       	          |
-|  arrowWidth  	      |                              Size of your carret    	                                  |    number     	| not required 	|       0       	          |
+|  arrowWidth  	      |                              Size of your carret    	                                  |    number     	| not required 	|       -       	          |
+|  popupWidth  	      |                  Size of your popup, required if you animate width     	                |    number     	| not required 	|       -       	          |
 |     prefix     	    |                  A prefix used to add classes to the portal node                       	|     string     	| not required 	|      rpp      	          |
 |     timeout    	    |                    The time it takes until popover disappears (ms)                    	|     number     	| not required 	|      1000     	          |
 |  animationTime 	    |                          The duration of your appear and disappear animations (ms)    	|     number     	| not required 	|      350      	          |
@@ -100,9 +103,6 @@ render(){
 
 # Customize
 You are free to customize the popup. react-popover-portal does not care on how your popup looks. Just pass a div as child.  
-You can even animate the carret as I have done in examples.  
-
-
 
 ### Animate 
 You can animate the popup when it appears or disappears. Simply add these classes to your css (with popup as prefix):  
@@ -117,8 +117,8 @@ You can animate the popup when it appears or disappears. Simply add these classe
 }
 ```
 
-> See `/examples/src/styles/animated.scss` and `/examples/src/components/AnimatedPopover.jsx`
-> NB !`{prefix}__active`  and `{prefix}__hidden` will be added to the portal node.
+> See `/examples/src/styles/animated.scss` and `/examples/src/components/AnimatedPopover.jsx`  
+> Prefixes `{prefix}__active`  and `{prefix}__hidden` will be added to the portal node.
 
 # Known issues
 

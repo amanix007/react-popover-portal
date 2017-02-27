@@ -30,7 +30,8 @@
 .popupAnimated__hidden {
   opacity: 0;
   background: white;
-  height: 0
+  height: 0;
+  width: 0;
 }
 
 // - Active animation 
@@ -38,6 +39,7 @@
   opacity: 1;
   background: rgba(40, 33, 31, 0.9);
   height: 200px;
+  width: 240px;    // <--- NB!
 }
 
 // - Add padding to the content instead of the portal node 
@@ -54,7 +56,8 @@
   background: rgba(230, 33, 31, 0.9);
   color: white;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-  display: flex;
+  display: flex; 
+  width: 200px;
 }
 
 // - Add padding to the content instead of the portal node 
@@ -68,14 +71,13 @@
 .popupAnimatedSpecial__hidden {
   opacity: 0;
   background: deepskyblue;
-  height: 0;
 }
 
 // - Active animation 
 .popupAnimatedSpecial__active {
   opacity: 1;
   background: rgba(230, 33, 31, 0.9);
-  height: 100px;
+  width: 420px; // <--- NB!
 }
 
 

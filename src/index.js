@@ -31,12 +31,14 @@ class Portal extends Component {
 
         open: PropTypes.bool.isRequired,
         parent: PropTypes.string.isRequired,
-        arrowWidth: PropTypes.number,
+        
 
         // - Settings 
         prefix: PropTypes.string,                                   // - Prefix used to add classes to portal node 
         timeout: PropTypes.number,                                  // - Time to disappear
         offset: PropTypes.number,                                   // - Offset to parent
+        arrowWidth: PropTypes.number,                               // - Set arrowWidth if you use getArrowPosition() to position the arrow
+        popupWidth: PropTypes.number,                               // - Set popupWidth if you need to animate the width
 
         // - Animations 
         animationTime: PropTypes.number,                            // - The animation speed
@@ -219,7 +221,7 @@ class Portal extends Component {
      */
     updatePosition() {
 
-        const { parent } = this.props;
+        const { parent, popupWidth } = this.props;
 
         const windowScrollVertical = document.body.scrollLeft;
         const windowScrollHorizontal = document.body.scrollTop;
@@ -227,22 +229,22 @@ class Portal extends Component {
         const parentEl = document.querySelector(parent);
 
         const parentBounds = parentEl.getBoundingClientRect();
-        const portalBounds = portal.node.getBoundingClientRect();
+        const portalWidth = popupWidth || portal.node.getBoundingClientRect().width;
 
         // - Attach to parent and include horizontal scroll offset  
         let top = windowScrollHorizontal + parentBounds.top + parentBounds.height;
 
         // - Attach to middle of parent and also include the vertical scroll offset 
-        let left = windowScrollVertical + parentBounds.left + parentBounds.width / 2 - portalBounds.width / 2;
+        let left = windowScrollVertical + parentBounds.left + parentBounds.width / 2 - portalWidth / 2;
 
         // - Incase the popup goes out of screen 
-        const offset = this.calculateOffsetVertical(left, portalBounds.width);
+        const offset = this.calculateOffsetVertical(left, portalWidth);
         left -= offset;
 
         portal.node.style.transform = `translate(${left}px, ${top}px)`;
 
         // - Callback so user can update arrow position 
-        this.notifyArrowPosition(offset, portalBounds.width);
+        this.notifyArrowPosition(offset, portalWidth);
 
     }
 

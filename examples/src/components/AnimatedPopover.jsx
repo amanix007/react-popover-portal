@@ -37,6 +37,9 @@ updateArrowPosition(arrowPositionX){
       },{
         name: 'background',
         ease: 'ease-in-out'
+      },{
+        name: 'width',
+        ease: 'ease'
       }
     ] 
     
@@ -50,6 +53,7 @@ updateArrowPosition(arrowPositionX){
         {this.props.special ? 
         
         <Popover 
+            popupWidth={420} transitions={transitions}
             animationTime={500} transitionSpeed={420} transitionEase='ease-in-out'
             getArrowPosition={this.updateArrowPosition.bind(this)} arrowWidth={10}
             prefix='popupAnimatedSpecial' parent={'#' + this.props.id} onMouseEnter={this.displayPopup} onMouseLeave={this.hidePopup} open={this.state.open}>
@@ -60,6 +64,7 @@ updateArrowPosition(arrowPositionX){
         </Popover>
         :
         <Popover 
+            popupWidth={240} 
             animationTime={500} transitionSpeed={420} transitionEase='ease-in-out'
             getArrowPosition={this.updateArrowPosition.bind(this)} arrowWidth={10}
             prefix='popupAnimated' parent={'#' + this.props.id} onMouseEnter={this.displayPopup} onMouseLeave={this.hidePopup} open={this.state.open}>
