@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/onurhb/react-popover-portal.svg?branch=master)](https://travis-ci.org/onurhb/react-popover-portal)
 
 # react-popover-portal
-A simple 'shared' popover that renders to the body. Accelerated translation between nodes.  <br/>
+A simple 'shared' popover that renders to the body. Accelerated translation between nodes.  
 
 `npm install -S react-popover-portal`
 
@@ -10,8 +10,8 @@ A simple 'shared' popover that renders to the body. Accelerated translation betw
 ![GIF](https://raw.githubusercontent.com/onurhb/react-popover-portal/master/showcase.gif)
 
 # Example
-1. Make sure that you have installed packages in root folder and examples folder. <br/>
-2. To start webpack dev server, run `npm start` inside `/examples` folder. <br/>
+1. Make sure that you have installed packages in root folder and examples folder.  
+2. To start webpack dev server, run `npm start` inside `/examples` folder.  
 3. Navigate to `localhost:8080` .
 
 # Usage
@@ -49,7 +49,7 @@ render(){
   </div>);
 }
 ```
-> Adding `onMouseEnter` and `onMouseLeave` to Popover prevents it from disappearing when hovered <br/>
+> Adding `onMouseEnter` and `onMouseLeave` to Popover prevents it from disappearing when hovered  
 
 #### In your css file : 
 
@@ -96,16 +96,16 @@ render(){
 |  getArrowPosition  	|                       Callback for arrow positioning (left position)                  	|    function    	| not required 	|       -       	          |
 
 
-> If you are using a carret specify the width with arrowWidth prop. <br/>
+> If you are using a carret specify the width with arrowWidth prop.  
 
 # Customize
-You are free to customize the popup. react-popover-portal does not care on how your popup looks. Just pass a div as child.  <br/>
-You can even animate the carret as I have done in examples. <br/>
+You are free to customize the popup. react-popover-portal does not care on how your popup looks. Just pass a div as child.  
+You can even animate the carret as I have done in examples.  
 
 
 
 ### Animate 
-You can animate the popup when it appears or disappears. Simply add these classes to your css (with popup as prefix): <br/>
+You can animate the popup when it appears or disappears. Simply add these classes to your css (with popup as prefix):  
 
 ```
 .popup__hidden{
@@ -123,8 +123,8 @@ You can animate the popup when it appears or disappears. Simply add these classe
 
 # Known issues
 
-- When you set the height of the popup in your css file (eg. animating it from 0px to 200px) the children will still have a fixed height.
-Because the onMouseEnter and onMouseLeave is listening on child events, the popup will close even when the user is hovering the popup.  
+- When you set the height of the popup in your css file (eg. animating it from 0px to 200px) the children will still have a fixed height.  
+Because the onMouseEnter and onMouseLeave is listening on child events, the popup will close even when the user is hovering the popup.    
 If you need to set the height, simply add `display:flex` to the popup class and 'height:100%' to the container child to force it to cover the popup. 
 
 - Animating the width is problematic as it is used to calculate popover position before attaching it to the parent.
@@ -134,4 +134,3 @@ A solution to fix this problem is by passing the final width as a prop. Another 
 
 - Possible to specify position of the popup relative to parent: 'left', 'bottom', 'top' and 'right'
 - Force the arrow to point to a specific position on the parent, eg parent's right corner. 
-
