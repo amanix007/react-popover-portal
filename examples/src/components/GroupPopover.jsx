@@ -4,7 +4,7 @@ import React from 'react';
 import Popover from '../../../src/index';
 
 
-class ArrowPopover extends React.Component {
+class Group extends React.Component {
   constructor() {
     super();
     this.state = { open: false , arrowPositionX : 0};
@@ -26,22 +26,25 @@ class ArrowPopover extends React.Component {
       this.setState({arrowPositionX});
   }
 
+
   render() {
-
-
     return(
     <div>
+      
         <div className="box" style={this.props.style} onMouseEnter={this.displayPopup} onMouseLeave={this.hidePopup} id={this.props.id}>
-            Parent
+            {this.props.group}
         </div>
 
-         <Popover 
-            getArrowPosition={this.updateArrowPosition.bind(this)} arrowWidth={10} 
-            prefix='popupArrow' parent={'#' + this.props.id} onMouseEnter={this.displayPopup} onMouseLeave={this.hidePopup} open={this.state.open}>
+         <Popover open={this.state.open}
+          getArrowPosition={this.updateArrowPosition.bind(this)} arrowWidth={10} 
+          prefix='popupGroup' group={this.props.group} parent={'#' + this.props.id} 
+          onMouseEnter={this.displayPopup} onMouseLeave={this.hidePopup} >
+
                 <span className='triangle' style={{left: this.state.arrowPositionX}}></span>
-                <div className='popupArrow-content'>
-                   {this.props.content}
+                <div className='popupGroup-content'>
+                   my group is {this.props.group}  
                 </div>
+
         </Popover>
 
     </div>
@@ -51,4 +54,4 @@ class ArrowPopover extends React.Component {
 
 }
 
-export default ArrowPopover;
+export default Group;

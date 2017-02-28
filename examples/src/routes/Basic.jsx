@@ -21,7 +21,13 @@ class Basic extends React.Component {
   render() {
     return(
     <div>
-      <RaisedButton onClick={this.toggleAttachToButton.bind(this)} id='parent0' label='Press me and hover the parents below'></RaisedButton>
+
+      <p>All the parents share the same popup. The popup is rendered to body.</p>
+      <p>The portal can attach itself to any DOM element. Just give react-popover-portal a document query string (id, class...) and it will find the DOM using  
+        <code> document.querySelector</code>.</p>
+      <p>By pressing the link below the popup will attach itself to the link instead.</p>
+      
+      <a style={{color:'white'}}  onClick={this.toggleAttachToButton.bind(this)} href="#" id='parent0' label=''>Press me and hover any parent!</a>
 
       <ArrowPopover id={this.state.attachToButton ? 'parent0' : 'parent1'} content='1'  style={{position: 'absolute', top: '300px', left: '2%'}}></ArrowPopover>
       <ArrowPopover id={this.state.attachToButton ? 'parent0' : 'parent2'} content='2'  style={{position: 'absolute', top: '400px', right: '12%'}}></ArrowPopover>

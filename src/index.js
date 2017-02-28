@@ -1,10 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 
-const portal = {
-    node: null,
-    timer: null
-};
+
+let groups = {};
 
 /**
  * The popover content gets rendered to this component
@@ -31,7 +29,7 @@ class Portal extends Component {
 
         open: PropTypes.bool.isRequired,
         parent: PropTypes.string.isRequired,
-        
+        group: PropTypes.string,
 
         // - Settings 
         prefix: PropTypes.string,                                   // - Prefix used to add classes to portal node 
@@ -62,6 +60,7 @@ class Portal extends Component {
         arrowWidth: 0,
         animationTime: 420,
         translateSpeed: 420,
+        group: 'portal',
         translateEase: 'ease-in-out',
         transitions: [{
             name: 'all',
@@ -79,15 +78,15 @@ class Portal extends Component {
      */
     displayPortal() {
 
-        const {translateSpeed, prefix, animationTime, transitions, translateEase} = this.props;
+        const {translateSpeed, prefix, animationTime, transitions, translateEase, group} = this.props;
 
         // - Prevent other components from removing the portal 
-        clearTimeout(portal.timer);
+        clearTimeout(groups[group].timer);
 
         // - Add classes when portal is open
-        portal.node.className = prefix 
-        portal.node.classList.add(prefix + '__active');
-        portal.node.classList.remove(prefix + '__hidden');
+        groups[group].node.className = prefix 
+        groups[group].node.classList.add(prefix + '__active');
+        groups[group].node.classList.remove(prefix + '__hidden');
 
         // - Styles
         let mTransitions = '';
@@ -95,7 +94,7 @@ class Portal extends Component {
 
         mTransitions += `transform ${translateSpeed < 0 ? 1 : translateSpeed}ms ${translateEase}`;
 
-        portal.node.style.transition = mTransitions;
+        groups[group].node.style.transition = mTransitions;
 
     }
 
@@ -104,18 +103,18 @@ class Portal extends Component {
      */
     scheduleHide() {
 
-        const { prefix, timeout, animationTime } = this.props;
+        const { prefix, timeout, animationTime , group} = this.props;
 
         // - Prevent other components from removing the portal 
-        clearTimeout(portal.timer);
+        clearTimeout(groups[group].timer);
 
-        portal.timer = setTimeout(() => {
+        groups[group].timer = setTimeout(() => {
 
             // - Add classes when portal is closed
-            portal.node.classList.remove(prefix + '__active');
-            portal.node.classList.add(prefix + '__hidden');
+            groups[group].node.classList.remove(prefix + '__active');
+            groups[group].node.classList.add(prefix + '__hidden');
 
-            portal.timer = setTimeout(() => ReactDOM.unmountComponentAtNode(portal.node), animationTime)
+            groups[group].timer = setTimeout(() => ReactDOM.unmountComponentAtNode(groups[group].node), animationTime)
 
         }, timeout);
 
@@ -143,7 +142,9 @@ class Portal extends Component {
      */
     componentDidMount() {
 
-        if (!portal.node) {
+        const { group } = this.props;
+
+        if (!groups[group]) {
             this.renderNode();
         }
 
@@ -155,16 +156,19 @@ class Portal extends Component {
      */
     renderNode() {
 
-        const {translateSpeed, prefix, animationTime, transitions, offset} = this.props;
+        const {translateSpeed, prefix, animationTime, transitions, offset, group} = this.props;
 
-        portal.node = document.createElement('div');
-        portal.node.style.position = 'absolute';
-        portal.node.style.display  = 'flex';
+        const node = document.createElement('div');
+        node.style.position = 'absolute';
+        node.style.display  = 'flex';
 
-        portal.node.style.top = `${offset}px`;
-        portal.node.style.left = '0px';
+        node.style.top = `${offset}px`;
+        node.style.left = '0px';
 
-        document.body.appendChild(portal.node);
+        groups[group] = { node: node, timer: null };
+
+        document.body.appendChild(node);
+        
     }
 
     /**
@@ -221,7 +225,7 @@ class Portal extends Component {
      */
     updatePosition() {
 
-        const { parent, popupWidth } = this.props;
+        const { parent, popupWidth, group } = this.props;
 
         const windowScrollVertical = document.body.scrollLeft;
         const windowScrollHorizontal = document.body.scrollTop;
@@ -229,7 +233,7 @@ class Portal extends Component {
         const parentEl = document.querySelector(parent);
 
         const parentBounds = parentEl.getBoundingClientRect();
-        const portalWidth = popupWidth || portal.node.getBoundingClientRect().width;
+        const portalWidth = popupWidth || groups[group].node.getBoundingClientRect().width;
 
         // - Attach to parent and include horizontal scroll offset  
         let top = windowScrollHorizontal + parentBounds.top + parentBounds.height;
@@ -241,7 +245,7 @@ class Portal extends Component {
         const offset = this.calculateOffsetVertical(left, portalWidth);
         left -= offset;
 
-        portal.node.style.transform = `translate(${left}px, ${top}px)`;
+        groups[group].node.style.transform = `translate(${left}px, ${top}px)`;
 
         // - Callback so user can update arrow position 
         this.notifyArrowPosition(offset, portalWidth);
@@ -254,12 +258,12 @@ class Portal extends Component {
     renderPopup(props) {
 
         // - Render portal 
-        const {children, ...other} = props;
+        const {children, group, ...other} = props;
 
         ReactDOM.unstable_renderSubtreeIntoContainer(
             this,
             <Popover {...other}>{children}</Popover>,
-            portal.node,
+            groups[group].node,
             () => this.updatePosition()
         );
     }
@@ -267,8 +271,8 @@ class Portal extends Component {
     /**
      * Returns the portal node 
      */
-    getNode() {
-        return portal.node;
+    getNode(group) {
+        return portal[group].node;
     }
 
     /**

@@ -19,9 +19,16 @@ class Arrow extends React.Component {
   render() {
     return(
     <div>
+
+      <p>The arrow gets automatically positioned close to parent.</p>
+      <p>To do this use getArrowPosition() callback. This gives you a left position which can be used to position the arrow.</p>
+      <p>See examples <code>ArrowPopover.jsx</code> component at</p>
+      <a style={{color:'white'}} href="https://github.com/onurhb/react-popover-portal/tree/master/examples/src/components">GitHub</a>
+      
+
       <ArrowPopover id={'parent1'} content='1 : arrow should move'      style={{position: 'absolute', top: '350px', left: '-2%'}}></ArrowPopover>
       <ArrowPopover id={'parent2'} content='2 : do you see it moving?'  style={{position: 'absolute', top: '500px', left: '37%'}}></ArrowPopover>
-      <ArrowPopover id={'parent3'} content='3 : does it twerk?'         style={{position: 'absolute', top: '300px', left: '60%'}}></ArrowPopover>
+      <ArrowPopover id={'parent3'} content='3 : does it twerk?'         style={{position: 'absolute', top: '420px', left: '60%'}}></ArrowPopover>
       <ArrowPopover id={'parent4'} content='4 : yes it does! That is cool!'           style={{position: 'absolute', top: '600px', right: '-1%'}}></ArrowPopover>
     </div>
     );

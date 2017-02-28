@@ -49,7 +49,10 @@ class App extends React.Component {
             <div className="col-xs-2">
               <FlatButton backgroundColor={this.state.activeIndex == 2 ? 'rgba(255, 255, 255, 0.1)' : null} 
               containerElement={<Link to="/animated" />} label="Animated" secondary={true} onClick={this.setActiveIndex.bind(this, 2)} />
-
+            </div>           
+             <div className="col-xs-2">
+              <FlatButton backgroundColor={this.state.activeIndex == 3 ? 'rgba(255, 255, 255, 0.1)' : null} 
+              containerElement={<Link to="/group" />} label="Groups" secondary={true} onClick={this.setActiveIndex.bind(this, 3)} />
             </div>
           </div>
 

@@ -1,0 +1,37 @@
+.popupGroup {
+    background: rgba(0, 0, 0, 0.4);
+    text-align: center;
+    cursor: pointer;
+    font-size: 24px;
+}
+
+.popupGroup-content {
+    padding: 10px;
+}
+
+.popupGroup__hidden{
+    opacity: 0;
+}
+
+.popupGroup__active{
+    opacity: 1;
+}
+
+
+// - Just a simple triangle carret  
+.triangle {
+  bottom: 100%;
+  left: 0;
+  border: solid transparent;
+  content: "";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+  border-color: rgba(29, 39, 46, 0);
+  border-bottom-color: #E63C78;
+  border-width: 10px;
+
+  // - If you want to animate the carret
+  transition: all 0.5s ease;
+}
