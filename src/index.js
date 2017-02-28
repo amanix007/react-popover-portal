@@ -271,8 +271,8 @@ class Portal extends Component {
     /**
      * Returns the portal node 
      */
-    getNode(group) {
-        return portal[group].node;
+    getNode(group = 'portal') {
+        return groups[group].node;
     }
 
     /**
