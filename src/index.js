@@ -84,7 +84,7 @@ class Portal extends Component {
         clearTimeout(groups[group].timer);
 
         // - Add classes when portal is open
-        groups[group].node.className = prefix 
+        groups[group].node.className = prefix
         groups[group].node.classList.add(prefix + '__active');
         groups[group].node.classList.remove(prefix + '__hidden');
 
@@ -103,7 +103,7 @@ class Portal extends Component {
      */
     scheduleHide() {
 
-        const { prefix, timeout, animationTime , group} = this.props;
+        const { prefix, timeout, animationTime, group} = this.props;
 
         // - Prevent other components from removing the portal 
         clearTimeout(groups[group].timer);
@@ -114,7 +114,13 @@ class Portal extends Component {
             groups[group].node.classList.remove(prefix + '__active');
             groups[group].node.classList.add(prefix + '__hidden');
 
-            groups[group].timer = setTimeout(() => ReactDOM.unmountComponentAtNode(groups[group].node), animationTime)
+            groups[group].timer = setTimeout(() => {
+
+                ReactDOM.unmountComponentAtNode(groups[group].node);
+                groups[group].node.remove();
+                groups[group] = null;
+
+            }, animationTime)
 
         }, timeout);
 
@@ -125,30 +131,23 @@ class Portal extends Component {
      */
     componentWillReceiveProps(props) {
 
-        const { open } = props;
+        const { open, group } = props;
 
-        if (open) {
-            this.renderPopup(props);
-            this.displayPortal();
+        if (!groups[group]) {
+            this.renderNode();
         }
+        
+        if (open) {
+            this.displayPortal();
+            this.renderPopup(props);
+        }
+
         else {
             this.scheduleHide();
         }
 
     }
 
-    /**
-     * Initial 
-     */
-    componentDidMount() {
-
-        const { group } = this.props;
-
-        if (!groups[group]) {
-            this.renderNode();
-        }
-
-    }
 
     /**
      * Renders portal node used to render react app into 
@@ -156,11 +155,11 @@ class Portal extends Component {
      */
     renderNode() {
 
-        const {translateSpeed, prefix, animationTime, transitions, offset, group} = this.props;
+        const { offset, group} = this.props;
 
         const node = document.createElement('div');
         node.style.position = 'absolute';
-        node.style.display  = 'flex';
+        node.style.display = 'flex';
 
         node.style.top = `${offset}px`;
         node.style.left = '0px';
@@ -168,7 +167,7 @@ class Portal extends Component {
         groups[group] = { node: node, timer: null };
 
         document.body.appendChild(node);
-        
+
     }
 
     /**
@@ -180,10 +179,10 @@ class Portal extends Component {
      */
     calculateOffsetVertical(left, popupWidth) {
 
-        if(left < 0) {
+        if (left < 0) {
             return left - 5;
-        }else if(left + popupWidth > document.body.clientWidth){
-            return  left + popupWidth - document.body.clientWidth + 5;
+        } else if (left + popupWidth > document.body.clientWidth) {
+            return left + popupWidth - document.body.clientWidth + 5;
         }
 
         return 0;
@@ -199,20 +198,20 @@ class Portal extends Component {
 
         const { getArrowPosition, arrowWidth } = this.props;
 
-        if(!getArrowPosition) return;
+        if (!getArrowPosition) return;
 
         let position;
 
         // - Calculate how much to offset so arrow is always pointing to parent 
-        if(offset == 0){
+        if (offset == 0) {
             position = popupWidth / 2 - arrowWidth;     // - Is middle 
-        }else if(offset < 0){
+        } else if (offset < 0) {
             position = offset + popupWidth / 2;         // - Is left  
-        }else{  
-            position = offset + popupWidth / 2  - arrowWidth * 2;   // - Is right
+        } else {
+            position = offset + popupWidth / 2 - arrowWidth * 2;   // - Is right
         }
 
-        if(this.arrowPosition == position) return;
+        if (this.arrowPosition == position) return;
 
         // - Fire callback 
         getArrowPosition(position);
@@ -266,6 +265,7 @@ class Portal extends Component {
             groups[group].node,
             () => this.updatePosition()
         );
+
     }
 
     /**
