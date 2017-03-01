@@ -60,7 +60,7 @@ describe('Component: index.js', () => {
         open: false,
         parent: '#parent',
         prefix: 'popup',
-        timeout: 0,
+        timeout: 1000,
         animationTime: 0
     }
 
@@ -76,17 +76,7 @@ describe('Component: index.js', () => {
         expect(wrapper.instance().getNode().innerHTML.indexOf('Test')).toBeGreaterThan(-1);
     });
 
-    it('removed from the portal on close', (done) => {
-
-        const wrapper = mount(<Popover {...minimumProps}> <div>Test</div> </Popover>);
-        wrapper.setProps({ open: false });
-
-        // - Since scheduleClose() is async 
-        setTimeout(() => {
-            expect(wrapper.instance().getNode().innerHTML).toNotExist();
-            done();
-        }, minimumProps.timeout + minimumProps.animationTime + 100);
-    })
+    it('portal is removed on close');
 
 
     it('content changes on parent change', () => {
