@@ -55,7 +55,7 @@ class Portal extends Component {
 
     static defaultProps = {
         prefix: 'rpp',
-        timeout: 1000,
+        timeout: 10000,
         offset: 10,
         arrowWidth: 0,
         animationTime: 420,
@@ -180,9 +180,9 @@ class Portal extends Component {
     calculateOffsetVertical(left, popupWidth) {
 
         if (left < 0) {
-            return left - 5;
+            return left;
         } else if (left + popupWidth > document.body.clientWidth) {
-            return left + popupWidth - document.body.clientWidth + 5;
+            return left + popupWidth - document.body.clientWidth;
         }
 
         return 0;
@@ -204,13 +204,16 @@ class Portal extends Component {
 
         // - Calculate how much to offset so arrow is always pointing to parent 
         if (offset == 0) {
-            position = popupWidth / 2 - arrowWidth;     // - Is middle 
+            position = popupWidth / 2 - arrowWidth / 2;     // - Is middle 
         } else if (offset < 0) {
-            position = offset + popupWidth / 2;         // - Is left  
+            position = offset + popupWidth / 2 - arrowWidth / 2;         // - Is left  
+            if(position < 0) position = 0;
         } else {
-            position = offset + popupWidth / 2 - arrowWidth * 2;   // - Is right
+            position = offset + popupWidth / 2 - arrowWidth / 2;   // - Is right
+            if(position > popupWidth) position = popupWidth - arrowWidth;
         }
 
+        // - Only callback when arrowPosition is different 
         if (this.arrowPosition == position) return;
 
         // - Fire callback 

@@ -30,6 +30,8 @@ class Arrow extends React.Component {
       <ArrowPopover id={'parent2'} content='2 : do you see it moving?'  style={{position: 'absolute', top: '500px', left: '37%'}}></ArrowPopover>
       <ArrowPopover id={'parent3'} content='3 : does it twerk?'         style={{position: 'absolute', top: '420px', left: '60%'}}></ArrowPopover>
       <ArrowPopover id={'parent4'} content='4 : yes it does! That is cool!'           style={{position: 'absolute', top: '600px', right: '-1%'}}></ArrowPopover>
+      <ArrowPopover id={'parent5'} content='5 : Hi me again!'         style={{position: 'absolute', top: '730px', right: '-4%'}}></ArrowPopover>
+      <ArrowPopover id={'parent6'} content='6 : whatsup?'         style={{position: 'absolute', top: '630px', left: '-4%'}}></ArrowPopover>
     </div>
     );
   }

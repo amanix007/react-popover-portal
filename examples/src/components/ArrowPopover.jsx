@@ -36,7 +36,7 @@ class ArrowPopover extends React.Component {
         </div>
 
          <Popover 
-            getArrowPosition={this.updateArrowPosition.bind(this)} arrowWidth={10} 
+            getArrowPosition={this.updateArrowPosition.bind(this)} arrowWidth={20} 
             prefix='popupArrow' parent={'#' + this.props.id} onMouseEnter={this.displayPopup} onMouseLeave={this.hidePopup} open={this.state.open}>
                 <span className='triangle' style={{left: this.state.arrowPositionX}}></span>
                 <div className='popupArrow-content'>
