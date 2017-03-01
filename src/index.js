@@ -55,7 +55,7 @@ class Portal extends Component {
 
     static defaultProps = {
         prefix: 'rpp',
-        timeout: 10000,
+        timeout: 1000,
         offset: 10,
         arrowWidth: 0,
         animationTime: 420,
