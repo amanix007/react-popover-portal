@@ -4,6 +4,18 @@ import ReactDOM from 'react-dom';
 
 let groups = {};
 
+
+export const removeAllPopups = () => {
+    const groupKeys = Object.keys(groups);
+
+    groupKeys.map(group => {
+            clearTimeout(groups[group].timer);
+            groups[group].node.remove();
+            delete groups[group];
+    });
+
+}
+
 /**
  * The popover content gets rendered to this component
  */
@@ -55,7 +67,7 @@ class Portal extends Component {
 
     static defaultProps = {
         prefix: 'rpp',
-        timeout: 1000,
+        timeout: 750,
         offset: 10,
         arrowWidth: 0,
         animationTime: 420,
@@ -78,7 +90,7 @@ class Portal extends Component {
      */
     displayPortal() {
 
-        const {translateSpeed, prefix, animationTime, transitions, translateEase, group} = this.props;
+        const { translateSpeed, prefix, animationTime, transitions, translateEase, group } = this.props;
 
         // - Prevent other components from removing the portal 
         clearTimeout(groups[group].timer);
@@ -103,24 +115,23 @@ class Portal extends Component {
      */
     scheduleHide() {
 
-        const { prefix, timeout, animationTime, group} = this.props;
+        const { prefix, timeout, animationTime, group } = this.props;
+
+        // - Incase user used removeAllPopups()
+        if(!groups[group]) return;
 
         // - Prevent other components from removing the portal 
         clearTimeout(groups[group].timer);
 
+        // - Start timeout 
         groups[group].timer = setTimeout(() => {
 
             // - Add classes when portal is closed
             groups[group].node.classList.remove(prefix + '__active');
             groups[group].node.classList.add(prefix + '__hidden');
 
-            groups[group].timer = setTimeout(() => {
-
-                ReactDOM.unmountComponentAtNode(groups[group].node);
-                groups[group].node.remove();
-                groups[group] = null;
-
-            }, animationTime)
+            // - Give popup chance to animate 
+            groups[group].timer = setTimeout(() =>ReactDOM.unmountComponentAtNode(groups[group].node), animationTime)
 
         }, timeout);
 
@@ -133,11 +144,12 @@ class Portal extends Component {
 
         const { open, group } = props;
 
-        if (!groups[group]) {
-            this.renderNode();
-        }
-        
         if (open) {
+
+            if (!groups[group]) {
+                this.renderNode();
+            }
+
             this.displayPortal();
             this.renderPopup(props);
         }
@@ -155,7 +167,7 @@ class Portal extends Component {
      */
     renderNode() {
 
-        const { offset, group} = this.props;
+        const { offset, group, parent } = this.props;
 
         const node = document.createElement('div');
         node.style.position = 'absolute';
@@ -164,7 +176,7 @@ class Portal extends Component {
         node.style.top = `${offset}px`;
         node.style.left = '0px';
 
-        groups[group] = { node: node, timer: null };
+        groups[group] = { node: node, timer: null, position: { oldLeft: 0, oldTop: 0 } };
 
         document.body.appendChild(node);
 
@@ -204,13 +216,13 @@ class Portal extends Component {
 
         // - Calculate how much to offset so arrow is always pointing to parent 
         if (offset == 0) {
-            position = popupWidth / 2 - arrowWidth / 2;     // - Is middle 
+            position = popupWidth / 2 - arrowWidth / 2;                     // - Is middle 
         } else if (offset < 0) {
-            position = offset + popupWidth / 2 - arrowWidth / 2;         // - Is left  
-            if(position < 0) position = 0;
+            position = offset + popupWidth / 2 - arrowWidth / 2;            // - Is left  
+            if (position < 0) position = 0;
         } else {
-            position = offset + popupWidth / 2 - arrowWidth / 2;   // - Is right
-            if(position > popupWidth) position = popupWidth - arrowWidth;
+            position = offset + popupWidth / 2 - arrowWidth / 2;            // - Is right
+            if (position > popupWidth) position = popupWidth - arrowWidth;
         }
 
         // - Only callback when arrowPosition is different 
@@ -219,6 +231,7 @@ class Portal extends Component {
         // - Fire callback 
         getArrowPosition(position);
 
+        // - Keep track of current position 
         this.arrowPosition = position;
     }
 
@@ -247,7 +260,12 @@ class Portal extends Component {
         const offset = this.calculateOffsetVertical(left, portalWidth);
         left -= offset;
 
+        // - No need to update position if it is same position as last time, prevents wired transition when hovered twice rapidly  
+        const {oldLeft, oldTop} = groups[group].position;
+        if (oldLeft === left && oldTop === top) return;
+
         groups[group].node.style.transform = `translate(${left}px, ${top}px)`;
+        groups[group].position = { oldLeft: left, oldTop: top };
 
         // - Callback so user can update arrow position 
         this.notifyArrowPosition(offset, portalWidth);
@@ -260,7 +278,7 @@ class Portal extends Component {
     renderPopup(props) {
 
         // - Render portal 
-        const {children, group, ...other} = props;
+        const { children, group, ...other } = props;
 
         ReactDOM.unstable_renderSubtreeIntoContainer(
             this,

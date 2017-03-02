@@ -76,8 +76,6 @@ describe('Component: index.js', () => {
         expect(wrapper.instance().getNode().innerHTML.indexOf('Test')).toBeGreaterThan(-1);
     });
 
-    it('portal is removed on close');
-
 
     it('content changes on parent change', () => {
         const firstPortal = mount(<Popover {...minimumProps} parent='#parent'> <div>parent</div> </Popover>);

@@ -99,6 +99,10 @@ You can animate the popup when it appears or disappears. Simply add these classe
 > Prefixes `{prefix}__active`  and `{prefix}__hidden` will be added to the portal node.  
 > See `/examples/src/styles/animated.scss` and `/examples/src/components/AnimatedPopover.jsx`
 
+# Clear all popups
+Use `removeAllPopups()` to clear all popups from DOM including the portal.  
+This will prevent popup from staying when you're navigating with react-router etc (see components/App.jsx in examples).
+
 # Known issues
 - When you set the height of the popup in your CSS file (eg. animating it from 0px to 200px) the children will still have a fixed height.
 Because the onMouseEnter and onMouseLeave is listening on child events, the popup will close even when the user is hovering the popup.

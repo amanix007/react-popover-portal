@@ -53,8 +53,8 @@ updateArrowPosition(arrowPositionX){
         {this.props.special ? 
         
         <Popover 
-            popupWidth={420} transitions={transitions}
-            animationTime={500} transitionSpeed={420} transitionEase='ease-in-out'
+            popupWidth={320} transitions={transitions}
+            animationTime={500} transitionEase='ease-in-out'
             getArrowPosition={this.updateArrowPosition.bind(this)} arrowWidth={10}
             prefix='popupAnimatedSpecial' parent={'#' + this.props.id} onMouseEnter={this.displayPopup} onMouseLeave={this.hidePopup} open={this.state.open}>
                 <span className='triangle' style={{left: this.state.arrowPositionX}}></span>

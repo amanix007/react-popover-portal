@@ -7,6 +7,10 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 
 import FlatButton from 'material-ui/FlatButton';
 
+// - react-portal-popover
+import { removeAllPopups } from '../../../src/index';
+
+
 // - Just som meterial-ui stuff
 injectTapEventPlugin();
 
@@ -22,6 +26,7 @@ class App extends React.Component {
 
   setActiveIndex(index) {
     this.setState({ activeIndex: index })
+      removeAllPopups();    
   }
 
 
@@ -37,20 +42,20 @@ class App extends React.Component {
           <h1 id="head" style={{ fontSize: '72px' }}>react-popover-portal</h1>
 
           <div className="row center-xs between-xs toolbar">
-            <div className="col-xs-2">
+            <div className="col-xs">
               <FlatButton backgroundColor={this.state.activeIndex == 0 ? 'rgba(255, 255, 255, 0.1)' : null} 
               containerElement={<Link to="/" />} label="Basic use" secondary={true} onClick={this.setActiveIndex.bind(this, 0)} />
             </div>
-            <div className="col-xs-2">
+            <div className="col-xs">
               <FlatButton backgroundColor={this.state.activeIndex == 1 ? 'rgba(255, 255, 255, 0.1)' : null} 
               containerElement={<Link to="/arrow" />} label="With dynamic arrow" secondary={true} onClick={this.setActiveIndex.bind(this, 1)} />
 
             </div>
-            <div className="col-xs-2">
+            <div className="col-xs">
               <FlatButton backgroundColor={this.state.activeIndex == 2 ? 'rgba(255, 255, 255, 0.1)' : null} 
               containerElement={<Link to="/animated" />} label="Animated" secondary={true} onClick={this.setActiveIndex.bind(this, 2)} />
             </div>           
-             <div className="col-xs-2">
+             <div className="col-xs">
               <FlatButton backgroundColor={this.state.activeIndex == 3 ? 'rgba(255, 255, 255, 0.1)' : null} 
               containerElement={<Link to="/group" />} label="Groups" secondary={true} onClick={this.setActiveIndex.bind(this, 3)} />
             </div>
